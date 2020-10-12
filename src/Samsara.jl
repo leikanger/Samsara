@@ -7,10 +7,10 @@ module Samsara
 
 abstract type AbstractSystem end
 
-struct MockSystem <: AbstractSystem
+struct System <: AbstractSystem
     _system_dynamics_callback
     _system_parameters
-    function MockSystem(;system_dynamics=()->(nothing, ))
+    function System(;system_dynamics=()->(nothing, ))
         new(system_dynamics, system_dynamics())
     end
 end
