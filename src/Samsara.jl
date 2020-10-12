@@ -5,4 +5,9 @@ Module Samsara:
 """
 module Samsara
 
+abstract type AbstractSystem end
+
+struct MockSystem <: AbstractSystem
+end
+
 end # module
