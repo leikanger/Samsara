@@ -16,6 +16,16 @@ using Samsara, Test
     @test dimentionality(case_1D) == 1
     Samsara._update_system_simulation!(case_1D)
     @test system_state(case_1D) == (1.0)
+
+    # 2D system mechanics by sending in some 2D function:
+    function some_2D_function()
+        return (1.0, 2.0)
+    end
+    case_2D = Samsara.MockSystem(system_dynamics=some_2D_function)
+    @test dimentionality(case_2D) == 2
+    Samsara._update_system_simulation!(case_2D)
+    @test system_state(case_2D) == (1.0, 2.0)
+    
 end
 
 
