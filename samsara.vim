@@ -8,13 +8,14 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
 endif
 set shortmess=aoO
 badd +1 test/test_Samsara.jl
-badd +0 src/Samsara.jl
-badd +0 test/runtests.jl
+badd +1 src/Samsara.jl
+badd +4 test/runtests.jl
+badd +4 ../test/runtests.jl
 argglobal
 silent! argdel *
 $argadd test/test_Samsara.jl
 $argadd src/Samsara.jl
-edit test/runtests.jl
+edit test/test_Samsara.jl
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -28,7 +29,6 @@ set winwidth=1
 exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
 exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
 argglobal
-if bufexists('test/runtests.jl') | buffer test/runtests.jl | else | edit test/runtests.jl | endif
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -38,11 +38,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 2 - ((1 * winheight(0) + 27) / 55)
+let s:l = 1 - ((0 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-2
+1
 normal! 0
 wincmd w
 argglobal
