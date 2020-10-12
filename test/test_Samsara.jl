@@ -26,6 +26,12 @@ using Samsara, Test
     Samsara._update_system_simulation!(case_2D)
     @test system_state(case_2D) == (1.0, 2.0)
     
+    # 3D function that takes action: :1, :2, :3
+    function some_2D_function()
+        # Vi trenger _latent_parameters som kan brukes for å lagre ikkje-observerbare parametre: Desse kan brukes når man aktiverer SAT? action :1 aktiverer SAT(:1) ?? 
+        # TODO Tenke litt her!
+    end
+
     # TODO Send inn action!
 end
 
