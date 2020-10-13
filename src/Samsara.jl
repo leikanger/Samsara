@@ -15,10 +15,11 @@ abstract type AbstractSystem end
 
 mutable struct System <: AbstractSystem
     _observable_parameters
+    _latent_variables
     function System()
         # Lag eit tomt struct, oppdater med simulation-function (som er overskrevet fra utsida, 
         #   og definerer system mechanics), og returner oppdatert struct retval.
-        retval = new( missing )  # oppdatern i neste linje:
+        retval = new( missing, missing )  # oppdatern i neste linje:
 
         step_system_mechanics!(retval)  #nothing blir overskrevet.
         retval
@@ -30,7 +31,8 @@ step_system_mechanics! = (arg::System) -> arg._observable_parameters = (nothing,
 #### Functions ###
 " system_state(sys::AbstractSystem) returns system state of sys "
 function system_state(sys::AbstractSystem)
-    sys._observable_parameters
+    step_system_mechanics!(sys) # update
+    sys._observable_parameters  # return
 end
 
 " dimentionality(sys::AbstractSystem) returns dimentionality "

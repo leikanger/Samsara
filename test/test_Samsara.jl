@@ -31,14 +31,46 @@ using Samsara, Test
     @test dimentionality(case_2D) == 2
     @test system_state(case_2D) == (1.0, 2.0)
     
-    # 3D function that takes action: :1, :2, :3
-    function some_2D_function()
-        # Vi trenger _latent_parameters som kan brukes for å lagre ikkje-observerbare parametre: Desse kan brukes når man aktiverer SAT? action :1 aktiverer SAT(:1) -- gjennom latent param.?? 
-        # TODO Tenke litt her!
+    # System mechanics med _latent_variables
+    function Samsara.step_system_mechanics!(sys::Samsara.System)
+        if ismissing(sys._latent_variables)
+            sys._latent_variables = (1,1)
+        end
+        sys._observable_parameters = (55*sys._latent_variables[1], 123*sys._latent_variables[2])
     end
+    case_2D = Samsara.System()
+    @test system_state(case_2D) == (55, 123)
+    @test case_2D._latent_variables == (1, 1)
+    case_2D._latent_variables = (2, 2)
+    @test system_state(case_2D) == (110, 246)
 
-    # TODO Send inn action!
-end
+    # 3D function that takes action: :1, :2, :3
+    some_SAT_activation = 0.0
+    function Samsara.step_system_mechanics!(sys::Samsara.System)
+        sys._latent_variables = some_SAT_activation
+        if sys._latent_variables == 1.0
+            sys._observable_parameters = (55)
+        else
+            sys._observable_parameters = (0.0)
+        end
+    end
+    case = Samsara.System()
+    @test system_state(case) == 0.0
+    some_SAT_activation = 1.0
+    @test system_state(case) == 55
+    """
+        Vi kan lage simuleringer ved å definere system mechanics i funksjonen 
+        Samsara.step_system_mechanics!(sys) -- som vidare åpner for multiple dispatch ved å lage andre
+        subtyper SystemX <: AbstractSystem, og bare definere Sams.step_system_mechanics!(SysX) !!!
+
+        Funksjonane kan vidare undersøke om event-SAT er aktiv:  BAM! gjennom:    HAL.still_active(SAT) 
+    """
+        # _latent_parameters som kan brukes for å lagre ikkje-observerbare parametre: 
+        # Desse kan også brukes når man har events som går over fleire steg!! 
+        #   action :1 aktiverer SAT(:1) -- gjennom latent param.?? 
+
+    # TODO Test: Send inn action/events !!
+end#testset
 
 
 
