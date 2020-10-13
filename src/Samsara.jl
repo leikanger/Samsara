@@ -2,18 +2,30 @@
 Module Samsara: 
 -> The world for the agent: Day-to-day details and immediate focus of the agent 
     -- The environment HUGIN is operating in Samsara: World mechanism!
+
+System mechanics is simulated by the function step_simulation!(sys) som skriver til state til struct sys.
+    (1) Det er mulig å overskrive step_system_mechanics! fra utsida: 
+    Dette er måten å lage ulike simuleringer.
+    (2) System har state gjennom _observable_parameters og _latent_variables.
+    Begge er tilgjengelig for ovenenvte funksjon!
 """
 module Samsara
 
 abstract type AbstractSystem end
 
-struct System <: AbstractSystem
-    _system_dynamics_callback
+mutable struct System <: AbstractSystem
     _observable_parameters
-    function System(;system_dynamics=()->(nothing, ))
-        new(system_dynamics, system_dynamics())
+    function System()
+        # Lag eit tomt struct, oppdater med simulation-function (som er overskrevet fra utsida, 
+        #   og definerer system mechanics), og returner oppdatert struct retval.
+        retval = new( missing )  # oppdatern i neste linje:
+
+        step_system_mechanics!(retval)  #nothing blir overskrevet.
+        retval
     end
 end
+
+step_system_mechanics! = (arg::System) -> arg._observable_parameters = (nothing, )
 
 #### Functions ###
 " system_state(sys::AbstractSystem) returns system state of sys "
@@ -28,13 +40,6 @@ function dimentionality(sys::AbstractSystem)
     else
         length(system_state(sys))
     end
-end
-
-""" _update_system_simulation(sys::AbstractSystem)
-Update _observable_parameters from _system_dynamics_callback.
-"""
-function _update_system_simulation!(sys::AbstractSystem)
-    _observable_parameters = sys._system_dynamics_callback()
 end
 
 # PLAN

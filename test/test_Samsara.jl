@@ -11,19 +11,24 @@ using Samsara, Test
     @test system_state(case) == (nothing, )
     @test dimentionality(case) == 0
 
+    """ The way to define system mechnics is by multiple dispatch: Define system_mechanics! as function.
+    It is important that the Samsara-function is written, not a local function here..
+        -> redefine Samsara.step_system_mechanics!(arg::System)
+    """
     # 1D system mechnics: Supplied λ-function returns a scalar.
-    case_1D = Samsara.System(system_dynamics=()->(1.0))
+    function Samsara.step_system_mechanics!(arg::Samsara.System)
+        arg._observable_parameters = (1.0)
+    end
+    case_1D = Samsara.System()
     @test dimentionality(case_1D) == 1
-    Samsara._update_system_simulation!(case_1D)
     @test system_state(case_1D) == (1.0)
 
     # 2D system mechanics by sending in some 2D function:
-    function some_2D_function()
-        return (1.0, 2.0)
+    function Samsara.step_system_mechanics!(arg::Samsara.System)
+        arg._observable_parameters = (1.0, 2.0)
     end
-    case_2D = Samsara.System(system_dynamics=some_2D_function)
+    case_2D = Samsara.System()  # dimentionality is defined by Samsara.step_system_mechanics!(System)
     @test dimentionality(case_2D) == 2
-    Samsara._update_system_simulation!(case_2D)
     @test system_state(case_2D) == (1.0, 2.0)
     
     # 3D function that takes action: :1, :2, :3
