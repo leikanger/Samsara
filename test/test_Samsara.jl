@@ -65,13 +65,6 @@ using Samsara, Test
 
         Funksjonane kan vidare undersøke om event-SAT er aktiv:  BAM! gjennom:    HAL.still_active(SAT) 
     """
-        # _latent_parameters som kan brukes for å lagre ikkje-observerbare parametre: 
-        # Desse kan også brukes når man har events som går over fleire steg!! 
-        #   action :1 aktiverer SAT(:1) -- gjennom latent param.?? 
-
-    # TODO Test: Send inn action/events !!
 end#testset
-
-
 
 end#module TEST_SAMSARA
