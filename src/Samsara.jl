@@ -9,7 +9,7 @@ abstract type AbstractSystem end
 
 struct System <: AbstractSystem
     _system_dynamics_callback
-    _system_parameters
+    _observable_parameters
     function System(;system_dynamics=()->(nothing, ))
         new(system_dynamics, system_dynamics())
     end
@@ -18,7 +18,7 @@ end
 #### Functions ###
 " system_state(sys::AbstractSystem) returns system state of sys "
 function system_state(sys::AbstractSystem)
-    sys._system_parameters
+    sys._observable_parameters
 end
 
 " dimentionality(sys::AbstractSystem) returns dimentionality "
@@ -31,16 +31,16 @@ function dimentionality(sys::AbstractSystem)
 end
 
 """ _update_system_simulation(sys::AbstractSystem)
-Update _system_parameters from _system_dynamics_callback.
+Update _observable_parameters from _system_dynamics_callback.
 """
 function _update_system_simulation!(sys::AbstractSystem)
-    _system_parameters = sys._system_dynamics_callback()
+    _observable_parameters = sys._system_dynamics_callback()
 end
 
 # PLAN
-# - Etter kvart step, oppdateres _system_parameters. 
-#       step(sys, event) => simuler, så skriv til _system_parameters inne i step
-# - _system_parameters kan hentes ut ved observe(AbstractSystem)
+# - Etter kvart step, oppdateres _observable_parameters. 
+#       step(sys, event) => simuler, så skriv til _observable_parameters inne i step
+# - _observable_parameters kan hentes ut ved observe(AbstractSystem)
 # - 
 
 
