@@ -44,7 +44,7 @@ using Samsara, Test
     case_2D._latent_variables = (2, 2)
     @test system_state(case_2D) == (110, 246)
 
-    # 3D function that takes action: :1, :2, :3
+    # System function that takes input:    some_SAT_activation||
     some_SAT_activation = 0.0
     function Samsara.step_system_mechanics!(sys::Samsara.System)
         sys._latent_variables = some_SAT_activation
