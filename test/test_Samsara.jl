@@ -2,62 +2,57 @@ module TEST_SAMSARA
 using Samsara, Test
 
 @testset "system initiation" begin
-    case = Samsara.System()
+    DemoSys = Samsara.DemoSys
+
+    case = DemoSys()
     @test isa(case, Samsara.AbstractSystem)
 
     @test isa(system_state(case), Tuple)
 
-    # System state is nothing, since no system_dynamics was supplied in ctor 
-    @test system_state(case) == (nothing, )
-    @test dimentionality(case) == 0
-
-    """ The way to define system mechnics is by multiple dispatch: Define system_mechanics! as function.
-    It is important that the Samsara-function is written, not a local function here..
-        -> redefine Samsara.step_system_mechanics!(arg::System)
-    """
-    # 1D system mechnics: Supplied λ-function returns a scalar.
-    function Samsara.step_system_mechanics!(arg::Samsara.System)
-        arg._observable_parameters = (1.0)
-    end
-    case_1D = Samsara.System()
-    @test dimentionality(case_1D) == 1
-    @test system_state(case_1D) == (1.0)
-
-    # 2D system mechanics by sending in some 2D function:
-    function Samsara.step_system_mechanics!(arg::Samsara.System)
-        arg._observable_parameters = (1.0, 2.0)
-    end
-    case_2D = Samsara.System()  # dimentionality is defined by Samsara.step_system_mechanics!(System)
-    @test dimentionality(case_2D) == 2
-    @test system_state(case_2D) == (1.0, 2.0)
+    case = DemoSys((1), 1)
+    @test system_state(case) == (1)
+    @test dimensionality(case) == 1
+    " Observable state is defined by argument: In DemoSys, this is of type Tuple "
     
-    # System mechanics med _latent_variables
-    function Samsara.step_system_mechanics!(sys::Samsara.System)
-        if ismissing(sys._latent_variables)
-            sys._latent_variables = (1,1)
-        end
-        sys._observable_parameters = (55*sys._latent_variables[1], 123*sys._latent_variables[2])
-    end
-    case_2D = Samsara.System()
-    @test system_state(case_2D) == (55, 123)
-    @test case_2D._latent_variables == (1, 1)
-    case_2D._latent_variables = (2, 2)
-    @test system_state(case_2D) == (110, 246)
+    case = DemoSys((1,1), 3)
+    @test system_state(case) == (1, 1)
+    @test dimensionality(case) == 2
+    """
+    Create a struct of type DemoSys, with observable_param = (1,1) and latent_param = 3:
+        - system_state(case) = (observable_param)
+        - dimentionality(case) = length(observable_param)
+    """
 
-    # System function that takes input:    some_SAT_activation||
-    some_SAT_activation = 0.0
-    function Samsara.step_system_mechanics!(sys::Samsara.System)
-        sys._latent_variables = some_SAT_activation
-        if sys._latent_variables == 1.0
-            sys._observable_parameters = (55)
-        else
-            sys._observable_parameters = (0.0)
-        end
+    step_system_mechanics!(case) # update
+    @test system_state(case) == (4, 4)
+    step_system_mechanics!(case) # update
+    @test system_state(case) == (6, 6)
+    """
+    DemoSys have defined system mechanics in step_system_mechanics!(DemoSys) 
+        --> other systems can be created by inheriting AbstractSystem and by 
+        multiple dispatch of function step_system_mechanics!
+    """
+
+    function Samsara.step_system_mechanics!(arg::DemoSys)
+        arg._observable_parameters = (0)
     end
-    case = Samsara.System()
-    @test system_state(case) == 0.0
-    some_SAT_activation = 1.0
-    @test system_state(case) == 55
+    Samsara.step_system_mechanics!(case) # update
+    @test dimensionality(case) == 1
+    " It is possible to redefine system mechanics, although this is discouraged.. "
+
+    case = DemoSys( (10.0, 10.0), (0.0, 0.0) )
+    function Samsara.step_system_mechanics!(arg::DemoSys)
+        arg._observable_parameters = arg._observable_parameters .+ arg._latent_variables
+    end
+    Samsara.step_system_mechanics!(case) # update
+    @test system_state(case) == (10.0, 10.0)
+    case._latent_variables = (1.0, -5.0)
+    Samsara.step_system_mechanics!(case) # update
+    @test system_state(case) == (11.0, 5.0)
+    " Døme på korleis pådrag kan settes ved latent_variables: Ingen krav om at det er skalar heller! "
+
+
+
     """
         Vi kan lage simuleringer ved å definere system mechanics i funksjonen 
         Samsara.step_system_mechanics!(sys) -- som vidare åpner for multiple dispatch ved å lage andre
