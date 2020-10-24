@@ -59,7 +59,8 @@ include("circularsys.jl")
 mutable struct DemoSys <: AbstractSystem
     _observable_parameters
     _latent_variables
-    function DemoSys(observable_param =(1,) , latent_param =10)
+    function DemoSys(observable_param =(1,) , latent_param =nothing)
+        latent_param == nothing && (latent_param = 10)
         # Lag eit tomt struct, oppdater med simulation-function (som er overskrevet fra utsida, 
         #   og definerer system mechanics), og returner oppdatert struct retval.
         new( observable_param, latent_param )

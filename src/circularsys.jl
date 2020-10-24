@@ -10,7 +10,7 @@ Constructor takes argument of type: Tuple{Any}, writing to _all_nodes::Tuple
 Private functions _step_up! and _step_down! are used by step_system_mechanics!(CircularSys)
 """
 mutable struct CircularSys <: Samsara.AbstractSystem
-    _all_nodes::Tuple
+    _all_nodes
     _current_index::Int
     _all_actions::Tuple  # key => value     value is [:up, :down, :nothing]
     _latent_variables
