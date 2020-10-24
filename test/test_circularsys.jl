@@ -27,9 +27,20 @@ using Samsara, Test
     @test current_index(case) == 1
     " step_up! steps around to beginning when rounding the end => Circular! "
 
+    case = CircularSys(4)
+    @test current_index(case) == 1
+    @test step_up!(case) == 2
+    @test step_up!(case) == 3
+    @test step_up!(case) == 4
+    @test step_up!(case) == 1
+    " integration test: Step up works for a full circle "
+
+    case = CircularSys(2)
     case._current_index = 2
     @test step_down!(case) == 1
-
+    step_down!(case)
+    @test current_index(case) == 2
+    " Full round integration test for step_down! (on length(case) == 2) "
 end
 
 end#module TEST_CIRULARSYS
