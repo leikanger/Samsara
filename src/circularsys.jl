@@ -12,10 +12,15 @@ Private functions _step_up! and _step_down! are used by step_system_mechanics!(C
 mutable struct CircularSys <: Samsara.AbstractSystem
     _all_nodes::Tuple
     _current_index::Int
+    _all_actions::Tuple  # key => value     value is [:up, :down, :nothing]
     _latent_variables
-    function CircularSys(nodes =(:A, :B, :C))
+    function CircularSys(nodes =(:A, :B, :C); actions = (:up, :down, nothing) )
         _all_nodes = nodes
-        retval = new(_all_nodes, 1, nothing)
+        if length(actions) != 3
+            throw(ArgumentError("Wrong number of actions: 3 actions are required for CircularSys, "*
+                                "in an order representing the following:   :up, :down, :no-op"))
+        end
+        retval = new(_all_nodes, 1, actions, nothing)
         step_system_mechanics!(retval)
         return retval
     end
@@ -37,11 +42,10 @@ current_state(sys::CircularSys) = sys._all_nodes[current_index(sys)]
 current_index(sys::CircularSys) = sys._current_index
 current_action(sys::CircularSys)= sys._latent_variables
 function set_action_in(sys::CircularSys, action)
-    if action in [:up, :down]
+    if action in sys._all_actions
         sys._latent_variables = action
     else
         sys._latent_variables = nothing
-        throw(ArgumentError("trying to do illegal action for CircularSys"))
     end
 end
 
@@ -78,8 +82,8 @@ kan vi definere korleis systemet funker.
 """
 function step_system_mechanics!(sys::CircularSys)
     next_action = sys._latent_variables
-    next_action == :up   && (_step_up!(sys))
-    next_action == :down && (_step_down!(sys))
+    next_action == sys._all_actions[1] && (_step_up!(sys))
+    next_action == sys._all_actions[2] && (_step_down!(sys))
     #:else:              && *stay where you are*
          
     current_state(sys)
