@@ -31,7 +31,7 @@ using Samsara, Test
     @test current_index(case) == 1
     " step_up! steps around to beginning when rounding the end => Circular! "
 
-    case = CircularSys([1:4;])
+    case = CircularSys( (1,2,3,4) )
     @test current_index(case) == 1
     @test step_up!(case) == 2
     @test step_up!(case) == 3
@@ -39,7 +39,7 @@ using Samsara, Test
     @test step_up!(case) == 1
     " integration test: Step up works for a full circle "
 
-    case = CircularSys([:state1, :state2])
+    case = CircularSys( (:state1, :state2) )
     case._current_index = 2
     @test step_down!(case) == 1
     step_down!(case)
@@ -55,7 +55,7 @@ end
     current_action = Samsara.current_action
     set_action_in  = Samsara.set_action_in
 
-    case_system = CircularSys([:s1, :s2, :s3])
+    case_system = CircularSys( (:s1, :s2, :s3) )
     @assert current_state(case_system) == :s1
     @assert case_system._latent_variables == nothing
     @test current_action(case_system) == nothing
@@ -82,6 +82,8 @@ end
     set_action_in(case_system, :up)
     @assert current_state(case_system) == :s1
     @test step_system_mechanics!(case_system) == :s2
+    set_action_in(case_system, :down)
+    @test step_system_mechanics!(case_system) == :s1
 end
 
 end#module TEST_CIRULARSYS

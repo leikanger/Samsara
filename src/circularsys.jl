@@ -1,10 +1,19 @@
 using Samsara
 
+"""
+mutable struct CircularSys <: AbstractSystem
+This system is an implementation of circular double linked list,
+where one can step both up and down: 
+Deterministic transmission :up => +1 and :down => -1
+
+Constructor takes argument of type: Tuple{Any}, writing to _all_nodes::Tuple
+Private functions _step_up! and _step_down! are used by step_system_mechanics!(CircularSys)
+"""
 mutable struct CircularSys <: Samsara.AbstractSystem
-    _all_nodes
+    _all_nodes::Tuple
     _current_index::Int
     _latent_variables
-    function CircularSys(nodes =[:A, :B, :C])
+    function CircularSys(nodes =(:A, :B, :C))
         _all_nodes = nodes
         retval = new(_all_nodes, 1, nothing)
         step_system_mechanics!(retval)
