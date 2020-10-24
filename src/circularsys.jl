@@ -3,9 +3,12 @@ using Samsara
 mutable struct CircularSys <: Samsara.AbstractSystem
     _all_nodes
     _current_index::Int
+    _latent_variables
     function CircularSys(nodes =[:A, :B, :C])
         _all_nodes = nodes
-        new(_all_nodes, 1)
+        retval = new(_all_nodes, 1, nothing)
+        step_system_mechanics!(retval)
+        return retval
     end
 end
 
@@ -23,6 +26,10 @@ Returns the current state, where we are currently located, only.
 """
 current_state(sys::CircularSys) = sys._all_nodes[current_index(sys)]
 current_index(sys::CircularSys) = sys._current_index
+current_action(sys::CircularSys)= sys._latent_variables
+function set_action_in(sys::CircularSys, action)
+    sys._latent_variables = action
+end
 
 " Dispatch Base.length for this struct: "
 function Base.length(sys::CircularSys)
@@ -51,3 +58,15 @@ function _step_down!(sys::CircularSys)
     sys._current_index-=1
 end
 
+""" ======== Definerer system mechanics ===========
+Gjennom function step_system_mechanics!(CircularSys) 
+kan vi definere korleis systemet funker.
+"""
+function step_system_mechanics!(sys::CircularSys)
+    next_action = sys._latent_variables
+    next_action == :up   && (_step_up!(sys))
+    next_action == :down && (_step_down!(sys))
+    #:else:              && *stay where you are*
+         
+    current_state(sys)
+end

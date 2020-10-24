@@ -50,7 +50,33 @@ using Samsara, Test
 end
 
 @testset "System testing: circular system with deterministic actions" begin
-    
+    CircularSys    = Samsara.CircularSys
+    current_state  = Samsara.current_state
+    current_action = Samsara.current_action
+    set_action_in  = Samsara.set_action_in
+
+    case_system = CircularSys([:s1, :s2, :s3])
+    @assert current_state(case_system) == :s1
+    @assert case_system._latent_variables == nothing
+    @test current_action(case_system) == nothing
+    " Sircular system have _latent_variables of type action "
+
+    @assert current_state(case_system) == :s1
+    case_system._latent_variables = :up
+    step_system_mechanics!(case_system)
+    @test current_state(case_system) == :s2
+    case_system._latent_variables = :down
+    step_system_mechanics!(case_system)
+    @test current_state(case_system) == :s1
+    " System mechanics works as dictated by _latent_variables i.e. action "
+
+    set_action_in(case_system, :up)
+    @test current_action(case_system) == :up
+    " helper-funciton set_action_in(System, action) "
+
+
+    @assert current_state(case_system) == :s1
+    @test step_system_mechanics!(case_system) == :s2
 end
 
 end#module TEST_CIRULARSYS
