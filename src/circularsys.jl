@@ -12,9 +12,9 @@ Private functions _step_up! and _step_down! are used by step_system_mechanics!(C
 mutable struct CircularSys <: Samsara.AbstractSystem
     _all_nodes
     _current_index::Int
-    _all_actions::Tuple  # key => value     value is [:up, :down, :nothing]
+    _all_actions      # key => value     value is [:up, :down, :nothing]
     _latent_variables
-    function CircularSys(nodes =(:A, :B, :C); actions = (:up, :down, nothing) )
+    function CircularSys(;nodes =(:A, :B, :C), actions = (:up, :down, nothing) )
         _all_nodes = nodes
         if length(actions) != 3
             throw(ArgumentError("Wrong number of actions: 3 actions are required for CircularSys, "*

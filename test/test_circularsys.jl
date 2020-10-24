@@ -31,7 +31,7 @@ using Samsara, Test
     @test current_index(case) == 1
     " step_up! steps around to beginning when rounding the end => Circular! "
 
-    case = CircularSys( (1,2,3,4) )
+    case = CircularSys( nodes=(1,2,3,4) )
     @test current_index(case) == 1
     @test step_up!(case) == 2
     @test step_up!(case) == 3
@@ -39,7 +39,7 @@ using Samsara, Test
     @test step_up!(case) == 1
     " integration test: Step up works for a full circle "
 
-    case = CircularSys( (:state1, :state2) )
+    case = CircularSys( nodes=(:state1, :state2) )
     case._current_index = 2
     @test step_down!(case) == 1
     step_down!(case)
@@ -55,7 +55,7 @@ end
     current_action = Samsara.current_action
     set_action_in  = Samsara.set_action_in
 
-    case_system = CircularSys( (:s1, :s2, :s3) )
+    case_system = CircularSys( nodes=(:s1, :s2, :s3) )
     @assert current_state(case_system) == :s1
     @assert case_system._latent_variables == nothing
     @test current_action(case_system) == nothing
@@ -93,17 +93,17 @@ end
     current_action = Samsara.current_action
     current_state = Samsara.current_state
 
-    case = Samsara.CircularSys( (:s1, :s2, :s3), actions = (:auke, :minke, :drikke_kaffe) )
+    case = Samsara.CircularSys( nodes=(:s1, :s2, :s3), actions = (:auke, :minke, :drikke_kaffe) )
     @test case._all_actions == (:auke, :minke, :drikke_kaffe)
     " The action set, i.e. what represents the 3 actions [:up, :down, nothing] can be set by ctor arg "
 
     too_few_actions = (:første, :andre)
-    @test_throws ArgumentError Samsara.CircularSys( (:s1, :s2, :s3), actions = too_few_actions)
+    @test_throws ArgumentError Samsara.CircularSys( nodes=(:s1, :s2, :s3), actions = too_few_actions)
     too_many_actions = (:første, :andre, :a3, :4, :a5)
-    @test_throws ArgumentError Samsara.CircularSys( (:s1, :s2, :s3), actions = too_many_actions)
+    @test_throws ArgumentError Samsara.CircularSys( nodes=(:s1, :s2, :s3), actions = too_many_actions)
     " The set of actions have to be exactly 2: representing :up, :down, and :notning: "
 
-    case = Samsara.CircularSys( (:s1, :s2, :s3), actions = ("auke", :minke, 42) )
+    case = Samsara.CircularSys( nodes=(:s1, :s2, :s3), actions = ("auke", :minke, 42) )
     set_action_in(case, "auke") 
     current_action(case) == "auke"
     @assert current_state(case) == :s1
