@@ -34,7 +34,28 @@ function dimensionality(sys::AbstractSystem)
     end
 end
 
-" DemoSys : Demonstrasjon om korleis system kan implementeres "
+
+#===========================================================================#
+# Når man definerer eit nytt system, i ei anna fil, må denne koden takast
+# inn i modulen i tekstform.
+# -> No tar eg den med i module Samsara, siden denne skal brukes til TDD,
+# men seinare kan du gjøre dette samme for nye system, lokalt i prosjektet.
+# (include med local path, men siden den arver fra AbstractSystem, kan alt
+# av Samsara's funksjoner brukes på den)
+#===========================================================================#
+include("circularsys.jl")
+#===========================================================================#
+
+
+"""
+#===========================================================================#
+# Etabler eit DemoSys : Demonstrasjon om korleis eit Env-system kan lages:
+# - subtype AbstractSystem
+# - Definer step_system_mechanics!(arg::NY_TYPE)
+# Når du seinare skal gjøre det samme, kan dette defineres i ei eiga fil,
+# som includeres i prosjektet ditt
+#===========================================================================#
+"""
 mutable struct DemoSys <: AbstractSystem
     _observable_parameters
     _latent_variables
@@ -58,5 +79,5 @@ function step_system_mechanics!(arg::DemoSys)
 end
 
 
-export dimensionality, system_state, step_system_mechanics!           #EXPORT
+export AbstractSystem, dimensionality, system_state, step_system_mechanics!           #EXPORT
 end # module

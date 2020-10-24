@@ -7,14 +7,21 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +1 test/test_Samsara.jl
+badd +2 test/test_Samsara.jl
 badd +1 src/Samsara.jl
-badd +4 test/runtests.jl
+badd +5 test/runtests.jl
 badd +4 ../test/runtests.jl
+badd +1 test/test_circusys.jl
+badd +1 src/circusys.jl
+badd +1 src/circularsys.jl
+badd +2 test/test_circularsys.jl
+badd +0 ../HAL/test/test_HAL.jl
+badd +3 ../HAL/test/test_NRES.jl
 argglobal
 silent! argdel *
 $argadd test/test_Samsara.jl
 $argadd src/Samsara.jl
+set stal=2
 edit test/test_Samsara.jl
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -38,12 +45,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 27) / 55)
+let s:l = 23 - ((22 * winheight(0) + 27) / 54)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+23
+normal! 034|
 wincmd w
 argglobal
 2argu
@@ -56,16 +63,70 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 27) / 55)
+let s:l = 24 - ((23 * winheight(0) + 27) / 54)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+24
+normal! 02|
+wincmd w
+exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
+exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
+tabedit test/test_circularsys.jl
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
+exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
+argglobal
+1argu
+if bufexists('test/test_circularsys.jl') | buffer test/test_circularsys.jl | else | edit test/test_circularsys.jl | endif
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 7 - ((6 * winheight(0) + 27) / 54)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+7
+normal! 0
+wincmd w
+argglobal
+1argu
+if bufexists('src/circularsys.jl') | buffer src/circularsys.jl | else | edit src/circularsys.jl | endif
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 27 - ((26 * winheight(0) + 27) / 54)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+27
 normal! 0
 wincmd w
 exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
 exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
-tabnext 1
+tabnext 2
+set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
