@@ -72,9 +72,14 @@ end
 
     set_action_in(case_system, :up)
     @test current_action(case_system) == :up
+    set_action_in(case_system, :down)
+    @test current_action(case_system) == :down
+    @test_throws ArgumentError set_action_in(case_system, :everything_else)
+    @test current_action(case_system) == nothing
     " helper-funciton set_action_in(System, action) "
 
 
+    set_action_in(case_system, :up)
     @assert current_state(case_system) == :s1
     @test step_system_mechanics!(case_system) == :s2
 end

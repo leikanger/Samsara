@@ -28,7 +28,12 @@ current_state(sys::CircularSys) = sys._all_nodes[current_index(sys)]
 current_index(sys::CircularSys) = sys._current_index
 current_action(sys::CircularSys)= sys._latent_variables
 function set_action_in(sys::CircularSys, action)
-    sys._latent_variables = action
+    if action in [:up, :down]
+        sys._latent_variables = action
+    else
+        sys._latent_variables = nothing
+        throw(ArgumentError("trying to do illegal action for CircularSys"))
+    end
 end
 
 " Dispatch Base.length for this struct: "
