@@ -15,13 +15,12 @@ mutable struct CircularSys <: Samsara.AbstractSystem
     _all_actions      # key => value     value is [:up, :down, :nothing]
     _latent_variables
     function CircularSys(;nodes =(:A, :B, :C), actions = (:up, :down, nothing) )
-        _all_nodes = nodes
         if length(actions) != 3
             throw(ArgumentError("Wrong number of actions: 3 actions are required for CircularSys, "*
                                 "in an order representing the following:   :up, :down, :no-op"))
         end
-        retval = new(_all_nodes, 1, actions, nothing)
-        step_system_mechanics!(retval)
+        retval = new(nodes, 1, actions, nothing)
+        #step_system_mechanics!(retval)
         return retval
     end
 end
@@ -41,6 +40,7 @@ Returns the current state, where we are currently located, only.
 current_state(sys::CircularSys) = sys._all_nodes[current_index(sys)]
 current_index(sys::CircularSys) = sys._current_index
 current_action(sys::CircularSys)= sys._latent_variables
+
 function set_action_in(sys::CircularSys, action)
     if action in sys._all_actions
         sys._latent_variables = action
@@ -85,6 +85,8 @@ function step_system_mechanics!(sys::CircularSys)
     next_action == sys._all_actions[1] && (_step_up!(sys))
     next_action == sys._all_actions[2] && (_step_down!(sys))
     #:else:              && *stay where you are*
+    
+    sys._latent_variables = nothing
          
     current_state(sys)
 end

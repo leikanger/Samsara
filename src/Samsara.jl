@@ -79,6 +79,10 @@ function step_system_mechanics!(arg::DemoSys)
     return arg._observable_parameters
 end
 
+function set_action_in(sys::DemoSys, action)
+    @warn "not implemented in DemoSys"
+end
+
 
 export AbstractSystem, dimensionality, system_state, step_system_mechanics!           #EXPORT
 end # module
