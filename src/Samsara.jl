@@ -47,7 +47,7 @@ include("circularsys.jl")
 #===========================================================================#
 
 
-"""
+
 #===========================================================================#
 # Etabler eit DemoSys : Demonstrasjon om korleis eit Env-system kan lages:
 # - subtype AbstractSystem
@@ -55,7 +55,6 @@ include("circularsys.jl")
 # Når du seinare skal gjøre det samme, kan dette defineres i ei eiga fil,
 # som includeres i prosjektet ditt
 #===========================================================================#
-"""
 mutable struct DemoSys <: AbstractSystem
     _observable_parameters
     _latent_variables
