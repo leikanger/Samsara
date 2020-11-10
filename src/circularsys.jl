@@ -90,3 +90,5 @@ function step_system_mechanics!(sys::CircularSys)
          
     current_state(sys)
 end
+
+export step_system_mechanics!, system_state, current_state, set_action_in, current_action
