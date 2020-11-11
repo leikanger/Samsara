@@ -62,7 +62,7 @@ Return next, i.e. index of stepping one step "up".
 When at max-position, go around to beginning 
 """
 function _step_up!(sys::CircularSys)
-    sys._current_index == length(sys) && (return sys._current_index = 1)
+    (sys._current_index == length(sys)) && (return sys._current_index = 1)
     sys._current_index+=1
 end
 
@@ -73,7 +73,7 @@ Return next index, i.e. index of stepping one step "down"
 When at min-position, go around to the end
 """
 function _step_down!(sys::CircularSys)
-    sys._current_index == 1 && (return sys._current_index = length(sys))
+    (sys._current_index == 1) && (return sys._current_index = length(sys))
     sys._current_index-=1
 end
 

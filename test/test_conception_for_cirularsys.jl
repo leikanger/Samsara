@@ -1,7 +1,7 @@
 using Samsara, Conception
 
 muex = MuExS()
-all_actions=(SAT(:up), SAT(:down), SAT(:noop))
+all_actions=(SAT(:_up_), SAT(:down), SAT(:noop))
 case = Samsara.CircularSys(nodes=(SAT(:a, inMuExS=muex), 
                                   SAT(:b, inMuExS=muex), 
                                   SAT(:c, inMuExS=muex)),
@@ -11,7 +11,7 @@ activate!(it::SAT) = Conception.activate!(it)
 
 function demo()
     global all_actions
-    for i in 1:700
+    for i in 1:10000
         set_action_in(case, rand(all_actions) )
         step_system_mechanics!(case)
     end
@@ -24,7 +24,8 @@ function run()
 
     demo()
 
-    for it in SAT(:a)._incoming_asscon
+    lista = sort(SAT(:a)._incoming_asscon)
+    for it in lista
         @show it
     end
 end
