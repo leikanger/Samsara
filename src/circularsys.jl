@@ -1,4 +1,5 @@
 using Samsara
+using Conception: SAT, activate!
 
 """
 mutable struct CircularSys <: AbstractSystem
@@ -85,6 +86,10 @@ function step_system_mechanics!(sys::CircularSys)
     next_action == sys._all_actions[1] && (_step_up!(sys))
     next_action == sys._all_actions[2] && (_step_down!(sys))
     #:else:              && *stay where you are*
+    
+    # Fra Conception: TemporalType:
+    activate!(next_action) # For å aktivere læringa!
+    activate!(current_state(sys)) # For å aktivere læringa!
     
     sys._latent_variables = nothing
          
