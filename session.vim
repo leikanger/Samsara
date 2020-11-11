@@ -6,18 +6,20 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +2 test/test_Samsara.jl
+badd +23 test/test_Samsara.jl
 badd +1 src/Samsara.jl
 badd +5 test/runtests.jl
 badd +4 ../test/runtests.jl
 badd +1 test/test_circusys.jl
 badd +1 src/circusys.jl
 badd +1 src/circularsys.jl
-badd +2 test/test_circularsys.jl
-badd +0 ../HAL/test/test_HAL.jl
+badd +7 test/test_circularsys.jl
+badd +1 ../HAL/test/test_HAL.jl
 badd +3 ../HAL/test/test_NRES.jl
+badd +0 run.jl
+badd +0 test/test_conception_for_cirularsys.jl
 argglobal
-silent! argdel *
+%argdel
 $argadd test/test_Samsara.jl
 $argadd src/Samsara.jl
 set stal=2
@@ -86,7 +88,7 @@ exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
 exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
 argglobal
 1argu
-if bufexists('test/test_circularsys.jl') | buffer test/test_circularsys.jl | else | edit test/test_circularsys.jl | endif
+if bufexists("test/test_circularsys.jl") | buffer test/test_circularsys.jl | else | edit test/test_circularsys.jl | endif
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -105,7 +107,7 @@ normal! 0
 wincmd w
 argglobal
 1argu
-if bufexists('src/circularsys.jl') | buffer src/circularsys.jl | else | edit src/circularsys.jl | endif
+if bufexists("src/circularsys.jl") | buffer src/circularsys.jl | else | edit src/circularsys.jl | endif
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -115,16 +117,68 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 27 - ((26 * winheight(0) + 27) / 54)
+let s:l = 76 - ((45 * winheight(0) + 27) / 54)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-27
-normal! 0
+76
+normal! 029|
 wincmd w
 exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
 exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
-tabnext 2
+tabedit run.jl
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
+exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
+argglobal
+if bufexists("run.jl") | buffer run.jl | else | edit run.jl | endif
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 3 - ((2 * winheight(0) + 27) / 54)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+3
+normal! 044|
+wincmd w
+argglobal
+if bufexists("test/test_conception_for_cirularsys.jl") | buffer test/test_conception_for_cirularsys.jl | else | edit test/test_conception_for_cirularsys.jl | endif
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 15 - ((14 * winheight(0) + 27) / 54)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+15
+normal! 09|
+wincmd w
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
+exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
+tabnext 3
 set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
