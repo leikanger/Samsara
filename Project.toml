@@ -3,11 +3,7 @@ uuid = "93bd95ad-8744-4e98-9d71-5d570094ffad"
 authors = ["PerRL <leikange@gmail.com>"]
 version = "0.1.0"
 
-[compat]
-julia = "^1"
-
-[extras]
+[deps]
+Conception = "be2dcfde-40d4-4a49-a4ab-55bc8389027a"
+Kmodule = "42fbca70-08ad-43b3-abec-dd05d888a77d"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["Test"]

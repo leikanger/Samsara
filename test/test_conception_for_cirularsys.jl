@@ -12,7 +12,7 @@ activate!(it::SAT) = Conception.activate!(it)
 function demo()
     global all_actions
     for i in 1:10000
-        set_action_in(case, rand(all_actions) )
+        Samsara.set_action_in!(case, rand(all_actions) )
         step_system_mechanics!(case)
     end
 end

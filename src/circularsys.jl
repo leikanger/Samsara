@@ -1,5 +1,5 @@
-using Samsara
-using Conception: SAT, activate!
+using Samsara, Conception
+# using Conception: SAT, activate!
 
 """
 mutable struct CircularSys <: AbstractSystem
@@ -26,6 +26,8 @@ mutable struct CircularSys <: Samsara.AbstractSystem
     end
 end
 
+Conception.activate!(everything_else) = return
+
 """
 system_state(sys::CircularSys) 
 returnerer full system state for CircularSys -- a Tuple of observable_param 
@@ -42,7 +44,7 @@ current_state(sys::CircularSys) = sys._all_nodes[current_index(sys)]
 current_index(sys::CircularSys) = sys._current_index
 current_action(sys::CircularSys)= sys._latent_variables
 
-function set_action_in(sys::CircularSys, action)
+function set_action_in!(sys::CircularSys, action)
     if action in sys._all_actions
         sys._latent_variables = action
     else
@@ -96,4 +98,4 @@ function step_system_mechanics!(sys::CircularSys)
     current_state(sys)
 end
 
-export step_system_mechanics!, system_state, current_state, set_action_in, current_action
+export step_system_mechanics!, system_state, current_state, set_action_in!, current_action
