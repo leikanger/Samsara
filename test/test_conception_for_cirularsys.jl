@@ -6,13 +6,11 @@ all_nodes  = (SAT(:a, inMuExS=muex),
               SAT(:b, inMuExS=muex),
               SAT(:c, inMuExS=muex),
               SAT(:d, inMuExS=muex),
-              SAT(:E, inMuExS=muex),
+              SAT(:e, inMuExS=muex),
               SAT(:f, inMuExS=muex),
               SAT(:g, inMuExS=muex),
               SAT(:h, inMuExS=muex),
               SAT(:i, inMuExS=muex),
-              #SAT(:j, inMuExS=muex),
-              #SAT(:k, inMuExS=muex)
               )
 case = Samsara.CircularSys(nodes= all_nodes, actions=all_actions )
 
@@ -29,7 +27,11 @@ end
 function run(N::Int)
     demo(N)
 
-    show_links_to(SAT(:E))
+    println("\n\n\n")
+    for it in all_nodes
+        println("____________"*string(it)*"_____________________________________________")
+        show_links_to(it)
+    end
 end
 
 function show_links_to(to_node::SAT)

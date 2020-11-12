@@ -63,6 +63,7 @@ Reset current index to be the first: sys._current_index = 1
 """
 function reset!(sys::CircularSys)
     return sys._current_index = 1
+    #return sys._current_index = rand(1:length(sys._all_nodes))
 end
 
 """ 
