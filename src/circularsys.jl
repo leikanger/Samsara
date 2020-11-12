@@ -16,7 +16,7 @@ mutable struct CircularSys <: Samsara.AbstractSystem
     _all_actions      # key => value     value is [:up, :down, :nothing]
     _latent_variables
     function CircularSys(;nodes =(:A, :B, :C), actions = (:up, :down, nothing) )
-        if length(actions) != 3
+        if length(actions) < 1
             throw(ArgumentError("Wrong number of actions: 3 actions are required for CircularSys, "*
                                 "in an order representing the following:   :up, :down, :no-op"))
         end
@@ -58,6 +58,14 @@ function Base.length(sys::CircularSys)
 end
 
 """ 
+    reset!(sys::CircularSys)
+Reset current index to be the first: sys._current_index = 1
+"""
+function reset!(sys::CircularSys)
+    return sys._current_index = 1
+end
+
+""" 
 function step_up!(sys::CircularSys)
 Step one up. 
 Return next, i.e. index of stepping one step "up".
@@ -87,6 +95,9 @@ function step_system_mechanics!(sys::CircularSys)
     next_action = sys._latent_variables
     next_action == sys._all_actions[1] && (_step_up!(sys))
     next_action == sys._all_actions[2] && (_step_down!(sys))
+    if (length(sys._all_actions) > 3) && (next_action == sys._all_actions[4])
+        reset!(sys)
+    end
     #:else:              && *stay where you are*
     
     # Fra Conception: TemporalType:

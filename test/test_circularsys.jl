@@ -97,10 +97,10 @@ end
     @test case._all_actions == (:auke, :minke, :drikke_kaffe)
     " The action set, i.e. what represents the 3 actions [:up, :down, nothing] can be set by ctor arg "
 
-    too_few_actions = (:første, :andre)
-    @test_throws ArgumentError Samsara.CircularSys( nodes=(:s1, :s2, :s3), actions = too_few_actions)
-    too_many_actions = (:første, :andre, :a3, :4, :a5)
-    @test_throws ArgumentError Samsara.CircularSys( nodes=(:s1, :s2, :s3), actions = too_many_actions)
+    #too_few_actions = (:første, :andre)
+    #@test_throws ArgumentError Samsara.CircularSys( nodes=(:s1, :s2, :s3), actions = too_few_actions)
+    #too_many_actions = (:første, :andre, :a3, :4, :a5)
+    #@test_throws ArgumentError Samsara.CircularSys( nodes=(:s1, :s2, :s3), actions = too_many_actions)
     " The set of actions have to be exactly 2: representing :up, :down, and :notning: "
 
     case = Samsara.CircularSys( nodes=(:s1, :s2, :s3), actions = ("auke", :minke, 42) )
