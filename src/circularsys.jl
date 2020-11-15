@@ -48,7 +48,8 @@ function set_action_in!(sys::CircularSys, action)
     if action in sys._all_actions
         sys._latent_variables = action
     else
-        sys._latent_variables = nothing
+        throw(ExceptionError("Det funker ikkje"))
+        #sys._latent_variables = nothing
     end
 end
 
@@ -102,6 +103,7 @@ function step_system_mechanics!(sys::CircularSys)
     #:else:              && *stay where you are*
     
     # Fra Conception: TemporalType:
+    # I tilfelle selv-transisjon er  det viktig å også deaktivere!
     activate!(next_action) # For å aktivere læringa!
     activate!(current_state(sys)) # For å aktivere læringa!
     
