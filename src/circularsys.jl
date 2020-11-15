@@ -48,7 +48,7 @@ function set_action_in!(sys::CircularSys, action)
     if action in sys._all_actions
         sys._latent_variables = action
     else
-        throw(ExceptionError("Det funker ikkje"))
+        throw(ArgumentError("set_action_in funker ikkje slik for det enkle circularsys."))
         #sys._latent_variables = nothing
     end
 end
