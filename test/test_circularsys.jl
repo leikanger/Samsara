@@ -74,8 +74,8 @@ end
     @test current_action(case_system) == :up
     set_action_in!(case_system, :down)
     @test current_action(case_system) == :down
-    set_action_in!(case_system, :everything_else)
-    @test current_action(case_system) == nothing
+    @test_throws ArgumentError set_action_in!(case_system, :everything_else)
+    #@test current_action(case_system) == nothing
     " helper-funciton set_action_in!(System, action) "
 
     set_action_in!(case_system, :up)
@@ -111,8 +111,8 @@ end
     @assert current_state(case) == :s2
     set_action_in!(case, :minke) 
     @test step_system_mechanics!(case) == :s1
-    set_action_in!(case, "Trallalalala, drikke kaffe!")  # (ikkje lista som gyldige actions)
-    @test step_system_mechanics!(case) == :s1
+    #set_action_in!(case, "Trallalalala, drikke kaffe!")  # (ikkje lista som gyldige actions)
+    #@test step_system_mechanics!(case) == :s1
     " Actions kan være kva faen det vil, så lenge det følger (opp, ned, ingenting)-konvensjonen ! "
 end
 
