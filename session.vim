@@ -9,7 +9,7 @@ endif
 set shortmess=aoO
 badd +23 test/test_Samsara.jl
 badd +1 src/Samsara.jl
-badd +7 test/runtests.jl
+badd +6 test/runtests.jl
 badd +4 ../test/runtests.jl
 badd +1 test/test_circusys.jl
 badd +1 src/circusys.jl
@@ -21,8 +21,8 @@ badd +3 run.jl
 badd +47 test/test_conception_for_cirularsys.jl
 badd +42 ~/Conception.jl/src/trait.jl
 badd +1 test/methods_for_testing_samsara_for_circularsys.jl
-badd +0 test/test_link_node.jl
-badd +0 src/link_node.jl
+badd +4 test/test_link_node.jl
+badd +1 src/link_node.jl
 argglobal
 %argdel
 $argadd test/test_Samsara.jl
@@ -123,12 +123,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 23 - ((22 * winheight(0) + 30) / 60)
+let s:l = 1 - ((0 * winheight(0) + 30) / 60)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-23
-normal! 033|
+1
+normal! 019|
 wincmd w
 argglobal
 2argu
@@ -141,12 +141,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 24 - ((23 * winheight(0) + 30) / 60)
+let s:l = 50 - ((49 * winheight(0) + 30) / 60)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-24
-normal! 02|
+50
+normal! 023|
 wincmd w
 exe 'vert 1resize ' . ((&columns * 137 + 137) / 274)
 exe 'vert 2resize ' . ((&columns * 136 + 137) / 274)
@@ -199,7 +199,7 @@ if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 51
-normal! 085|
+normal! 08|
 wincmd w
 exe 'vert 1resize ' . ((&columns * 137 + 137) / 274)
 exe 'vert 2resize ' . ((&columns * 136 + 137) / 274)
@@ -252,7 +252,6 @@ normal! zt
 2
 normal! 0
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 136 + 137) / 274)
 exe 'vert 2resize ' . ((&columns * 137 + 137) / 274)
 tabnext 4
