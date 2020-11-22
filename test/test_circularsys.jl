@@ -57,8 +57,8 @@ end
 
     case_system = CircularSys( nodes=(:s1, :s2, :s3) )
     @assert current_state(case_system) == :s1
-    @assert case_system._latent_variables == nothing
-    @test current_action(case_system) == nothing
+    @assert isnothing(case_system._latent_variables)
+    @test isnothing(current_action(case_system))
     " Sircular system have _latent_variables of type action "
 
     @assert current_state(case_system) == :s1

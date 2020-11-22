@@ -1,4 +1,4 @@
-using Samsara, Conception
+using .Samsara, Conception
 using Printf
 
 function run(N::Int; number_of_nodes = nothing)
