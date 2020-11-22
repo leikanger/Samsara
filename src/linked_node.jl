@@ -1,6 +1,6 @@
 using .Samsara
 
-struct LinkNode
+struct LinkedNode
 end
 
 
