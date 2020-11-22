@@ -1,6 +1,6 @@
-using .Samsara
+using .Samsara, Conception
 
-struct LinkedNode
+struct LinkedNode <: Conception.TemporalType
 end
 
 
