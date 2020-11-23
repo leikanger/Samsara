@@ -1,5 +1,5 @@
 module TEST_CIRULARSYS
-using ..Samsara, Test
+using Samsara, Test
 
 @testset "circularsys initiation" begin
     CircularSys = Samsara.CircularSys
