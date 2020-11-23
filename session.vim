@@ -7,7 +7,7 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +23 test/test_Samsara.jl
+badd +1 test/test_Samsara.jl
 badd +1 src/Samsara.jl
 badd +6 test/runtests.jl
 badd +4 ../test/runtests.jl
@@ -21,8 +21,10 @@ badd +3 run.jl
 badd +47 test/test_conception_for_cirularsys.jl
 badd +42 ~/Conception.jl/src/trait.jl
 badd +1 test/methods_for_testing_samsara_for_circularsys.jl
-badd +4 test/test_link_node.jl
+badd +1 test/test_link_node.jl
 badd +1 src/link_node.jl
+badd +0 test/test_linked_node.jl
+badd +0 src/linked_node.jl
 argglobal
 %argdel
 $argadd test/test_Samsara.jl
@@ -43,11 +45,11 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 56 + 32) / 64)
-exe 'vert 1resize ' . ((&columns * 137 + 137) / 274)
-exe '2resize ' . ((&lines * 3 + 32) / 64)
-exe 'vert 2resize ' . ((&columns * 137 + 137) / 274)
-exe 'vert 3resize ' . ((&columns * 136 + 137) / 274)
+exe '1resize ' . ((&lines * 49 + 28) / 57)
+exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
+exe '2resize ' . ((&lines * 3 + 28) / 57)
+exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
+exe 'vert 3resize ' . ((&columns * 106 + 106) / 213)
 argglobal
 if bufexists("test/runtests.jl") | buffer test/runtests.jl | else | edit test/runtests.jl | endif
 setlocal fdm=manual
@@ -59,7 +61,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 6 - ((5 * winheight(0) + 28) / 56)
+let s:l = 6 - ((4 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -88,18 +90,18 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 30) / 60)
+let s:l = 1 - ((0 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 1
 normal! 0
 wincmd w
-exe '1resize ' . ((&lines * 56 + 32) / 64)
-exe 'vert 1resize ' . ((&columns * 137 + 137) / 274)
-exe '2resize ' . ((&lines * 3 + 32) / 64)
-exe 'vert 2resize ' . ((&columns * 137 + 137) / 274)
-exe 'vert 3resize ' . ((&columns * 136 + 137) / 274)
+exe '1resize ' . ((&lines * 49 + 28) / 57)
+exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
+exe '2resize ' . ((&lines * 3 + 28) / 57)
+exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
+exe 'vert 3resize ' . ((&columns * 106 + 106) / 213)
 tabedit test/test_Samsara.jl
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -111,8 +113,8 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 137 + 137) / 274)
-exe 'vert 2resize ' . ((&columns * 136 + 137) / 274)
+exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
+exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -123,7 +125,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 30) / 60)
+let s:l = 1 - ((0 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -141,15 +143,15 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 50 - ((49 * winheight(0) + 30) / 60)
+let s:l = 50 - ((43 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 50
 normal! 023|
 wincmd w
-exe 'vert 1resize ' . ((&columns * 137 + 137) / 274)
-exe 'vert 2resize ' . ((&columns * 136 + 137) / 274)
+exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
+exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
 tabedit test/test_circularsys.jl
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -161,8 +163,8 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 137 + 137) / 274)
-exe 'vert 2resize ' . ((&columns * 136 + 137) / 274)
+exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
+exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
 argglobal
 1argu
 if bufexists("test/test_circularsys.jl") | buffer test/test_circularsys.jl | else | edit test/test_circularsys.jl | endif
@@ -175,7 +177,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 115 - ((57 * winheight(0) + 30) / 60)
+let s:l = 115 - ((50 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -194,16 +196,16 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 51 - ((41 * winheight(0) + 30) / 60)
+let s:l = 51 - ((36 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 51
 normal! 08|
 wincmd w
-exe 'vert 1resize ' . ((&columns * 137 + 137) / 274)
-exe 'vert 2resize ' . ((&columns * 136 + 137) / 274)
-tabedit test/test_link_node.jl
+exe 'vert 1resize ' . ((&columns * 106 + 106) / 213)
+exe 'vert 2resize ' . ((&columns * 106 + 106) / 213)
+tabedit test/test_linked_node.jl
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -214,10 +216,10 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 136 + 137) / 274)
-exe 'vert 2resize ' . ((&columns * 137 + 137) / 274)
+exe 'vert 1resize ' . ((&columns * 105 + 106) / 213)
+exe 'vert 2resize ' . ((&columns * 107 + 106) / 213)
 argglobal
-if bufexists("test/test_link_node.jl") | buffer test/test_link_node.jl | else | edit test/test_link_node.jl | endif
+if bufexists("test/test_linked_node.jl") | buffer test/test_linked_node.jl | else | edit test/test_linked_node.jl | endif
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -227,15 +229,15 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 4 - ((3 * winheight(0) + 30) / 60)
+let s:l = 8 - ((7 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-4
-normal! 08|
+8
+normal! 03|
 wincmd w
 argglobal
-if bufexists("src/link_node.jl") | buffer src/link_node.jl | else | edit src/link_node.jl | endif
+if bufexists("src/linked_node.jl") | buffer src/linked_node.jl | else | edit src/linked_node.jl | endif
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -245,15 +247,15 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 2 - ((1 * winheight(0) + 30) / 60)
+let s:l = 1 - ((0 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-2
+1
 normal! 0
 wincmd w
-exe 'vert 1resize ' . ((&columns * 136 + 137) / 274)
-exe 'vert 2resize ' . ((&columns * 137 + 137) / 274)
+exe 'vert 1resize ' . ((&columns * 105 + 106) / 213)
+exe 'vert 2resize ' . ((&columns * 107 + 106) / 213)
 tabnext 4
 set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
