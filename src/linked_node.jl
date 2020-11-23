@@ -30,5 +30,15 @@ struct LinkedNode <: Conception.TemporalType
 end
 
 function Base.show(io::IO, arg::LinkedNode)
-    show(io, string(arg._id)*" ["*string(arg._nodeE)*" \longrightarrow "*string(arg._node_E))
+    if isnothing(arg._node_E)
+        text_nE = "|"
+    else
+        text_nE = string(arg._node_E)
+    end
+    if isnothing(arg._node_W)
+        text_nW = "|"
+    else
+        text_nW = string(arg._node_W)
+    end
+    print(io, "  node: "*string(arg._id)*" [ "*text_nE*" → "*text_nW*" ]")
 end
