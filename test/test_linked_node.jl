@@ -5,6 +5,10 @@ using Samsara, Conception, Test
     case = Samsara.LinkedNode()
     @test isa(case, Samsara.LinkedNode)
     @test isa(case, Conception.AbstractConcept)
+
+    state_set = Conception.MuExS()
+    case = Samsara.LinkedNode(in_MuEx=state_set)
+    @test Conception.exists_in_MuExS(case, state_set)
 end
 
 
