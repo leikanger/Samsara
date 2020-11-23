@@ -47,9 +47,10 @@ include("demosys.jl")
 include("circularsys.jl")
 #===========================================================================#
 
-include("linked_node.jl")
-
 export Samsara, AbstractSystem, dimensionality, system_state, step_system_mechanics!, set_action_in!           #EXPORT
+
+include("linked_node.jl")
+export LinkedNode
 
 
 end # module
