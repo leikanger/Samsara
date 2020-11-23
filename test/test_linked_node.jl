@@ -27,7 +27,9 @@ using Samsara, Conception, Test
     @test caseNode._node_E == node3
     @test isa(caseNode._node_W, Conception.AbstractConcept)
     @test caseNode._node_W == node1
-    " LinkedNode can have nodet to West and node to East, set by constructor "
+    " LinkedNode can have node to West and node to East, set by constructor "
+
+    caseList = Samsara.linked_list_factory(3)
 end
 
 

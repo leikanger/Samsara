@@ -29,6 +29,9 @@ struct LinkedNode <: Conception.TemporalType
     end
 end
 
+""" show(IO, LinkeNode)
+Print LinkeNode with node_to_W and node_to_E, with '|' if absent.
+"""
 function Base.show(io::IO, arg::LinkedNode)
     if isnothing(arg._node_E)
         text_nE = "|"
@@ -41,4 +44,7 @@ function Base.show(io::IO, arg::LinkedNode)
         text_nW = string(arg._node_W)
     end
     print(io, "  node: "*string(arg._id)*" [ "*text_nE*" → "*text_nW*" ]")
+end
+
+function linked_list_factory(N::Int)
 end
