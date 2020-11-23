@@ -13,6 +13,7 @@ using Samsara, Conception, Test
     caseNode = Samsara.LinkedNode(in_MuEx=state_set)
     @test Conception.exists_in_MuExS(caseNode, state_set)
     " Lage en LinkedNode => registreres i arg: [in_MuEx] "
+    @show(caseNode)
 
     @test isnothing(caseNode._node_W)
     @test isnothing(caseNode._node_E)

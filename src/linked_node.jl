@@ -29,4 +29,6 @@ struct LinkedNode <: Conception.TemporalType
     end
 end
 
-
+function Base.show(io::IO, arg::LinkedNode)
+    show(io, string(arg._id)*" ["*string(arg._nodeE)*" \longrightarrow "*string(arg._node_E))
+end
