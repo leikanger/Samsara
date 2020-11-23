@@ -12,10 +12,16 @@ Each link is of type Conception.TemporalType (like SAT):
 struct LinkedNode <: Conception.TemporalType
     _id
     _member_of_MuEx
-    function LinkedNode(;in_MuEx::Union{AbstractMuExS, Nothing}=nothing)
+    _node_E::Union{Conception.Conception.TemporalType, Nothing}
+    _node_W::Union{Conception.Conception.TemporalType, Nothing}
+    function LinkedNode(;
+                        node_to_E =nothing,
+                        node_to_W =nothing,
+                        in_MuEx::Union{AbstractMuExS, Nothing}=nothing)
         set_of_MuExS = AbstractMuExS[]
         !isnothing(in_MuEx) && push!(set_of_MuExS, in_MuEx)
-        the_node = new(:id, set_of_MuExS)
+        # Init
+        the_node = new(:id, set_of_MuExS, node_to_E, node_to_W)
 
         Conception.add_element_to_MuExS!(in_MuEx, the_node)
 
