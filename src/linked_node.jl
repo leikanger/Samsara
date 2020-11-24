@@ -1,5 +1,5 @@
 using .Samsara, Conception
-using UUIDs
+using UUIDs, Random
 
 """ LinkedNode is a node in a linked list, representing the states of a simulation.
 Each node has a number of possible transitions, of which can be effectuated by events.
@@ -22,7 +22,7 @@ mutable struct LinkedNode <: Conception.TemporalType
         # Id
         # Id can be anything, e.g. (parameter, value)-tuple?
         if ismissing(id)
-            uuid = UUIDs.uuid1()
+            uuid = UUIDs.uuid1(Random.MersenneTwister())
             id = "N_"*SubString(string(uuid), 1:6)
         end
         # MuExS
@@ -54,24 +54,32 @@ function Base.show(io::IO, arg::LinkedNode)
     print(io, "  node: "*string(arg._id)*" [ "*text_nE*" → "*text_nW*" ]")
 end
 
-""" _set_node_to_W(nodeA, nodeB)
+""" _set_node_to_W!(nodeA, nodeB)
 Set note to the west of nodeA to become nodeB. Note that nodeB can be Nothing 
 """
-function _set_node_to_W(nodeA::LinkedNode, nodeB::Union{LinkedNode, Nothing})
+function _set_node_to_W!(nodeA::LinkedNode, nodeB::Union{LinkedNode, Nothing})
     nodeA._node_W = nodeB
 end
 
-""" _set_node_to_E(nodeA, nodeB)
+""" _set_node_to_E!(nodeA, nodeB)
 Set note to the west of nodeA to become nodeB. Note that nodeB can be Nothing 
 """
-function _set_node_to_E(nodeA::LinkedNode, nodeB::Union{LinkedNode, Nothing})
+function _set_node_to_E!(nodeA::LinkedNode, nodeB::Union{LinkedNode, Nothing})
     nodeA._node_E = nodeB
 end
 
 function linked_list_factory(N::Int)
     retList = LinkedNode[]
-    for i in 1:N
-        push!(retList, LinkedNode("n"*string(i)))
+    # first item
+    previous_node = LinkedNode("n_1")
+    push!(retList, previous_node)
+    # .. then the rest -> for the sake of registering _node_E
+    for i in 2:N
+        the_node = LinkedNode("n"*string(i))
+        push!(retList, the_node)
+        _set_node_to_E!(the_node, previous_node)
+        _set_node_to_W!(previous_node, the_node)
+        previous_node = the_node
     end
     retList
 end

@@ -38,19 +38,19 @@ using Samsara, Conception, Test
     @assert node1._node_E === nothing
     node2 = LinkedNode(:2)
 
-    Samsara._set_node_to_W(node1, node2)
+    Samsara._set_node_to_W!(node1, node2)
     @test node1._node_W == node2
-    " set node to W with function _set_node_to_W(nodeA, nodeB) "
+    " set node to W with function _set_node_to_W!(nodeA, nodeB) "
 
-    Samsara._set_node_to_W(node1, nothing)
+    Samsara._set_node_to_W!(node1, nothing)
     @test node1._node_W === nothing
-    " set node to W with function _set_node_to_W(nodeA, nothing) "
+    " set node to W with function _set_node_to_W!(nodeA, nothing) "
 
-    Samsara._set_node_to_E(node2, node1)
+    Samsara._set_node_to_E!(node2, node1)
     @test node2._node_E == node1
-    Samsara._set_node_to_E(node2, nothing)
+    Samsara._set_node_to_E!(node2, nothing)
     @test node2._node_E === nothing
-    " set node to W with function _set_node_to_W(nodeA, nodeB) "
+    " set node to W with function _set_node_to_W!(nodeA, nodeB) "
 end
 
 @testset "linked_list_factory(N)" begin
@@ -64,8 +64,8 @@ end
     @test length(caseList) == 3
     " With N = 3    =>     factory makes list of 3 nodes "
 
-    #@test caseList[1]._node_W == caseList[2]
-    #@test caseList[2]._node_E == caseList[1]
+    @test caseList[1]._node_W == caseList[2]
+    @test caseList[2]._node_E == caseList[1]
 end
 
 
