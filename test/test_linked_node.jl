@@ -54,7 +54,16 @@ using Samsara, Conception, Test
 end
 
 @testset "Conception.TemporalType funksjonalitet" begin
-    # TODO
+    """ LinkedNode arber fra Conception.TemporalType, og er meint for å 
+    kunne bruke funksjonane i Conception.jl/srt/trait.jl 
+    (sjå også time.jl i Conception.jl om TemporalType)
+    """
+    muex = Conception.MuExS()
+    n1 = LinkedNode(in_MuEx=muex)
+    #activate!(n1)
+    #@test is_active(n1)
+    # 
+    # TODO Må være medlem av MuExS! Hopper dit no..
 end
 
 @testset "linked_list_factory(N)" begin
