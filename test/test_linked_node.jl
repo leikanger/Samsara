@@ -43,9 +43,14 @@ using Samsara, Conception, Test
     " set node to W with function _set_node_to_W(nodeA, nodeB) "
 
     Samsara._set_node_to_W(node1, nothing)
-    @test node1._node_W == nothing
-    " set node to W with function _set_node_to_W(nodeA, nodeB) "
+    @test node1._node_W === nothing
+    " set node to W with function _set_node_to_W(nodeA, nothing) "
 
+    Samsara._set_node_to_E(node2, node1)
+    @test node2._node_E == node1
+    Samsara._set_node_to_E(node2, nothing)
+    @test node2._node_E === nothing
+    " set node to W with function _set_node_to_W(nodeA, nodeB) "
 end
 
 @testset "linked_list_factory(N)" begin

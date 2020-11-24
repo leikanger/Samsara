@@ -61,6 +61,13 @@ function _set_node_to_W(nodeA::LinkedNode, nodeB::Union{LinkedNode, Nothing})
     nodeA._node_W = nodeB
 end
 
+""" _set_node_to_E(nodeA, nodeB)
+Set note to the west of nodeA to become nodeB. Note that nodeB can be Nothing 
+"""
+function _set_node_to_E(nodeA::LinkedNode, nodeB::Union{LinkedNode, Nothing})
+    nodeA._node_E = nodeB
+end
+
 function linked_list_factory(N::Int)
     retList = LinkedNode[]
     for i in 1:N
