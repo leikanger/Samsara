@@ -60,8 +60,14 @@ end
     """
     muex = Conception.MuExS()
     n1 = LinkedNode(in_MuEx=muex)
-    #activate!(n1)
-    #@test is_active(n1)
+    @test length(muex._elements) == 1
+    activate!(n1)
+    @test is_active(n1)
+    @test muex._active_element == n1
+    " LinkedNode fungerer som TemporalType, dvs. likestilt med SAT! "
+
+    muex_stateset = Conception.MuExS()
+
     # 
     # TODO Må være medlem av MuExS! Hopper dit no..
 end
@@ -89,6 +95,15 @@ end
     @test caseList[1]._node_W == caseList[2]
     @test caseList[end]._node_E == caseList[end-1]
     " linked_list_factory(N) integration test: creates a doubly-linked list of N elements "
+
+    muex = Conception.MuExS()
+    caseList = Samsara.linked_list_factory(3, in_MuExS=muex)
+    @show muex
+    #@show caseList
+    for item in caseList
+        @test item ∈ muex._elements
+    end
+    " LL_factory(N, in_MuExS) lager elementer i muex [in_MuExS] "
 end
 
 

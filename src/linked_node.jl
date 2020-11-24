@@ -26,7 +26,7 @@ mutable struct LinkedNode <: Conception.TemporalType
         # Id can be anything, e.g. (parameter, value)-tuple?
         if ismissing(id)
             uuid = UUIDs.uuid1(Random.MersenneTwister())
-            id = "N_"*SubString(string(uuid), 1:6)
+            id = "N_"*SubString(string(uuid), 1:8)
         end
         # MuExS
         set_of_MuExS = AbstractMuExS[]
@@ -47,12 +47,12 @@ function Base.show(io::IO, arg::LinkedNode)
     if isnothing(arg._node_E)
         text_nE = "|"
     else
-        text_nE = string(arg._node_E)
+        text_nE = string(arg._node_E._id)
     end
     if isnothing(arg._node_W)
         text_nW = "|"
     else
-        text_nW = string(arg._node_W)
+        text_nW = string(arg._node_W._id)
     end
     print(io, "  node: "*string(arg._id)*" [ "*text_nE*" → "*text_nW*" ]")
 end
@@ -71,14 +71,16 @@ function _set_node_to_E!(nodeA::LinkedNode, nodeB::Union{LinkedNode, Nothing})
     nodeA._node_E = nodeB
 end
 
-function linked_list_factory(N::Int)
+function linked_list_factory(N::Int; in_MuExS =nothing)
     retList = LinkedNode[]
-    # first item
-    previous_node = LinkedNode("n_1")
+    # first item      ( N > 0 )
+    previous_node = LinkedNode("n1", in_MuEx=in_MuExS)
     push!(retList, previous_node)
-    # .. then the rest -> for the sake of registering _node_E
+    N == 1 && return retList
+    # .. then the rest ( N > 1 ) 
+    #  split is made for the sake of registering _node_E
     for i in 2:N
-        the_node = LinkedNode("n"*string(i))
+        the_node = LinkedNode("n"*string(i), in_MuEx=in_MuExS)
         push!(retList, the_node)
         _set_node_to_E!(the_node, previous_node)
         _set_node_to_W!(previous_node, the_node)
