@@ -53,6 +53,10 @@ using Samsara, Conception, Test
     " set node to W with function _set_node_to_W!(nodeA, nodeB) "
 end
 
+@testset "Conception.TemporalType funksjonalitet" begin
+    # TODO
+end
+
 @testset "linked_list_factory(N)" begin
     caseList = Samsara.linked_list_factory(1)
     @test length(caseList) == 1
