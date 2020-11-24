@@ -29,7 +29,17 @@ using Samsara, Conception, Test
     @test caseNode._node_W == node1
     " LinkedNode can have node to West and node to East, set by constructor "
 
+end
+
+@testset "linked_list_factory(N)" begin
+    caseList = Samsara.linked_list_factory(1)
+    @test length(caseList) == 1
+    @test isa(caseList[1], LinkedNode)
+    @test isa(caseList, Vector{LinkedNode})
+    " factory with N=1 creates list of 1 linked_node "
+
     caseList = Samsara.linked_list_factory(3)
+    @test length(caseList) == 3
 end
 
 

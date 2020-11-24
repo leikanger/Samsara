@@ -47,4 +47,9 @@ function Base.show(io::IO, arg::LinkedNode)
 end
 
 function linked_list_factory(N::Int)
+    retList = LinkedNode[]
+    for i in 1:N
+        push!(retList, LinkedNode("n"*string(i)))
+    end
+    retList
 end
