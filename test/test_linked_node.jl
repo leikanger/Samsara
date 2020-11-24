@@ -103,7 +103,20 @@ end
     for item in caseList
         @test item ∈ muex._elements
     end
-    " LL_factory(N, in_MuExS) lager elementer i muex [in_MuExS] "
+    """ LL_factory(N, in_MuExS) lager elementer i muex [in_MuExS] -- 
+    det er enkelt å sette MuExS ved arg i LL_factory """
+
+    for item in caseList
+        activate!(item)
+        activate!(SAT(:some_action))
+        deactivate!(SAT(:some_action))
+        @test Conception.the_active_event_of(muex) == item
+    end
+    for item in caseList
+        @show item, item._incoming_asscon
+    end
+    @show caseList
+    # TODO lag bra automatiserte testar for forrige opplegget! TODO
 end
 
 

@@ -14,7 +14,7 @@ mutable struct LinkedNode <: Conception.TemporalType
     _id
     _last_activation_interval
     _member_of_MuEx::Vector{Conception.MuExS}
-    # _incoming_asscon # Trengs denne?
+     _incoming_asscon # Trengs denne?
     _node_E::Union{Conception.Conception.TemporalType, Nothing}
     _node_W::Union{Conception.Conception.TemporalType, Nothing}
 
@@ -32,7 +32,7 @@ mutable struct LinkedNode <: Conception.TemporalType
         set_of_MuExS = AbstractMuExS[]
         !isnothing(in_MuEx) && push!(set_of_MuExS, in_MuEx)
         # Init
-        the_node = new(id, Tuple{}(), set_of_MuExS, node_to_E, node_to_W)
+        the_node = new(id, Tuple{}(), set_of_MuExS, AssociativeLink[], node_to_E, node_to_W)
 
         Conception.add_element_to_MuExS!(in_MuEx, the_node)
 
@@ -54,7 +54,7 @@ function Base.show(io::IO, arg::LinkedNode)
     else
         text_nW = string(arg._node_W._id)
     end
-    print(io, "  node: "*string(arg._id)*" [ "*text_nE*" → "*text_nW*" ]")
+    print(io, "[ "*text_nE*"→|"*string(arg._id)*"|→"*text_nW*" ]")
 end
 
 """ _set_node_to_W!(nodeA, nodeB)
