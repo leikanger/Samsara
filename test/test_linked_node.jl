@@ -66,6 +66,16 @@ end
 
     @test caseList[1]._node_W == caseList[2]
     @test caseList[2]._node_E == caseList[1]
+    " Element 1 er East for node 2, og element 2 er West for node 1 "
+
+    caseList = Samsara.linked_list_factory(5)
+    for i in 2:length(caseList)-1
+        @test caseList[i]._node_W == caseList[i+1]
+        @test caseList[i]._node_E == caseList[i-1]
+    end
+    @test caseList[1]._node_W == caseList[2]
+    @test caseList[end]._node_E == caseList[end-1]
+    " linked_list_factory(N) integration test: creates a doubly-linked list of N elements "
 end
 
 
