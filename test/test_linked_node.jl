@@ -28,6 +28,23 @@ using Samsara, Conception, Test
     @test isa(caseNode._node_W, Conception.AbstractConcept)
     @test caseNode._node_W == node1
     " LinkedNode can have node to West and node to East, set by constructor "
+    
+    other_node = LinkedNode() 
+    @test LinkedNode()._id != other_node._id
+    " Constructed LinkedNode without id-arg are assigned unique id values "
+
+    node1 = LinkedNode(:1)
+    @assert node1._node_W === nothing
+    @assert node1._node_E === nothing
+    node2 = LinkedNode(:2)
+
+    Samsara._set_node_to_W(node1, node2)
+    @test node1._node_W == node2
+    " set node to W with function _set_node_to_W(nodeA, nodeB) "
+
+    Samsara._set_node_to_W(node1, nothing)
+    @test node1._node_W == nothing
+    " set node to W with function _set_node_to_W(nodeA, nodeB) "
 
 end
 
@@ -35,11 +52,15 @@ end
     caseList = Samsara.linked_list_factory(1)
     @test length(caseList) == 1
     @test isa(caseList[1], LinkedNode)
-    @test isa(caseList, Vector{LinkedNode})
     " factory with N=1 creates list of 1 linked_node "
 
     caseList = Samsara.linked_list_factory(3)
+    @test isa(caseList, Vector{LinkedNode})
     @test length(caseList) == 3
+    " With N = 3    =>     factory makes list of 3 nodes "
+
+    #@test caseList[1]._node_W == caseList[2]
+    #@test caseList[2]._node_E == caseList[1]
 end
 
 

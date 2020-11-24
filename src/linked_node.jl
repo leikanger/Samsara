@@ -1,4 +1,5 @@
 using .Samsara, Conception
+using UUIDs
 
 """ LinkedNode is a node in a linked list, representing the states of a simulation.
 Each node has a number of possible transitions, of which can be effectuated by events.
@@ -9,19 +10,26 @@ Each link is of type Conception.TemporalType (like SAT):
     have activation time, 
     and be a part of a MuExS.
 """
-struct LinkedNode <: Conception.TemporalType
+mutable struct LinkedNode <: Conception.TemporalType
     _id
     _member_of_MuEx
     _node_E::Union{Conception.Conception.TemporalType, Nothing}
     _node_W::Union{Conception.Conception.TemporalType, Nothing}
-    function LinkedNode(identifier=missing;
+    function LinkedNode(id=missing;
                         node_to_E =nothing,
                         node_to_W =nothing,
                         in_MuEx::Union{AbstractMuExS, Nothing}=nothing)
+        # Id
+        # Id can be anything, e.g. (parameter, value)-tuple?
+        if ismissing(id)
+            uuid = UUIDs.uuid1()
+            id = "N_"*SubString(string(uuid), 1:6)
+        end
+        # MuExS
         set_of_MuExS = AbstractMuExS[]
         !isnothing(in_MuEx) && push!(set_of_MuExS, in_MuEx)
         # Init
-        the_node = new(identifier, set_of_MuExS, node_to_E, node_to_W)
+        the_node = new(id, set_of_MuExS, node_to_E, node_to_W)
 
         Conception.add_element_to_MuExS!(in_MuEx, the_node)
 
@@ -44,6 +52,13 @@ function Base.show(io::IO, arg::LinkedNode)
         text_nW = string(arg._node_W)
     end
     print(io, "  node: "*string(arg._id)*" [ "*text_nE*" → "*text_nW*" ]")
+end
+
+""" _set_node_to_W(nodeA, nodeB)
+Set note to the west of nodeA to become nodeB. Note that nodeB can be Nothing 
+"""
+function _set_node_to_W(nodeA::LinkedNode, nodeB::Union{LinkedNode, Nothing})
+    nodeA._node_W = nodeB
 end
 
 function linked_list_factory(N::Int)
