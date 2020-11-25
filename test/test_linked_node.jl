@@ -99,7 +99,6 @@ end
     muex = Conception.MuExS()
     caseList = Samsara.linked_list_factory(3, in_MuExS=muex)
     @show muex
-    #@show caseList
     for item in caseList
         @test item ∈ muex._elements
     end
@@ -108,10 +107,30 @@ end
 
     for item in caseList
         activate!(item)
+        @test Conception.the_active_event_of(muex) == item
+        " The activating an item causes that item to be active in that muex.. (verifying  "
+    end
+    for i in 2:length(caseList)
+        @test length(caseList[i]._incoming_asscon) == 0
+    end
+    """ .. but the lenght of incoming asscons are 0 (since no concurrent event happened
+    while traversing the linked state-list """
+
+    for item in caseList
+        activate!(item)
         activate!(SAT(:some_action))
-        deactivate!(SAT(:some_action))
         @test Conception.the_active_event_of(muex) == item
     end
+    for i in 2:length(caseList)
+        @test caseList[i]._incoming_asscon[1].nodeL == caseList[i-1]
+        @test caseList[i]._incoming_asscon[1].nodeR == SAT(:some_action)
+    end
+    """ incoming asscons is sorted, such that the first element is the most recent in history;
+    This test verifies that each element has 
+        * the most recent item in the linked list as nodeL
+        * the concurrent event with that node is SAT(:some_action)  (as nodeR)
+    """
+
     for item in caseList
         @show item, item._incoming_asscon
     end
