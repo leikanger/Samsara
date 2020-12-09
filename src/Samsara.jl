@@ -50,7 +50,7 @@ include("circularsys.jl")
 export Samsara, AbstractSystem, dimensionality, system_state, step_system_mechanics!, set_action_in!           #EXPORT
 
 include("linked_node.jl")
-export LinkedNode
+export LinkedCardinalNode
 
 
 end # module

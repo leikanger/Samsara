@@ -2,18 +2,18 @@ module TEST_LINKED_NODE
 using Samsara, Conception, Test
 
 @testset "LinkNode initiation" begin
-    caseNode = Samsara.LinkedNode()
-    @test isa(caseNode, Samsara.LinkedNode)
+    caseNode = Samsara.LinkedCardinalNode()
+    @test isa(caseNode, Samsara.LinkedCardinalNode)
     @test isa(caseNode, Samsara.EuclideanNode)
     @test isa(caseNode, Conception.Time.TemporalType)
-        " LinkedNode lager en struct av type Conception.AbstractConcept --- som også SAT gjør... "
+        " LinkedCardinalNode lager en struct av type Conception.AbstractConcept --- som også SAT gjør... "
 
-        @test LinkedNode("test")._id == "test"
+    @test LinkedCardinalNode("test")._id == "test"
 
     state_set = Conception.MuExS()
-    caseNode = Samsara.LinkedNode(in_MuEx=state_set)
+    caseNode = Samsara.LinkedCardinalNode(in_MuEx=state_set)
     @test Conception.exists_in_MuExS(caseNode, state_set)
-    " Lage en LinkedNode => registreres i arg: [in_MuEx] "
+    " Lage en LinkedCardinalNode => registreres i arg: [in_MuEx] "
 
     @show(caseNode)
 
@@ -21,23 +21,23 @@ using Samsara, Conception, Test
     @test isnothing(caseNode._node_E)
     " Default neste node (i retning E og W) er nothing "
 
-    node1 = LinkedNode("1")
-    node3 = LinkedNode("3")
-    caseNode = LinkedNode(node_to_E = node3, node_to_W = node1)
+    node1 = LinkedCardinalNode("1")
+    node3 = LinkedCardinalNode("3")
+    caseNode = LinkedCardinalNode(node_to_E = node3, node_to_W = node1)
     @test isa(caseNode._node_E, Conception.AbstractConcept)
     @test caseNode._node_E == node3
     @test isa(caseNode._node_W, Conception.AbstractConcept)
     @test caseNode._node_W == node1
-    " LinkedNode can have node to West and node to East, set by constructor "
+    " LinkedCardinalNode can have node to West and node to East, set by constructor "
     
-    other_node = LinkedNode() 
-    @test LinkedNode()._id != other_node._id
-    " Constructed LinkedNode without id-arg are assigned unique id values "
+    other_node = LinkedCardinalNode() 
+    @test LinkedCardinalNode()._id != other_node._id
+    " Constructed LinkedCardinalNode without id-arg are assigned unique id values "
 
-    node1 = LinkedNode(:1)
+    node1 = LinkedCardinalNode(:1)
     @assert node1._node_W === nothing
     @assert node1._node_E === nothing
-    node2 = LinkedNode(:2)
+    node2 = LinkedCardinalNode(:2)
 
     Samsara._set_node_to_W!(node1, node2)
     @test node1._node_W == node2
@@ -55,17 +55,17 @@ using Samsara, Conception, Test
 end
 
 @testset "Conception.TemporalType funksjonalitet" begin
-    """ LinkedNode arber fra Conception.TemporalType, og er meint for å 
+    """ LinkedCardinalNode arber fra Conception.TemporalType, og er meint for å 
     kunne bruke funksjonane i Conception.jl/srt/trait.jl 
     (sjå også time.jl i Conception.jl om TemporalType)
     """
     muex = Conception.MuExS()
-    n1 = LinkedNode(in_MuEx=muex)
+    n1 = LinkedCardinalNode(in_MuEx=muex)
     @test length(muex._elements) == 1
     activate!(n1)
     @test is_active(n1)
     @test muex._active_element == n1
-    " LinkedNode fungerer som TemporalType, dvs. likestilt med SAT! "
+    " LinkedCardinalNode fungerer som TemporalType, dvs. likestilt med SAT! "
 
     muex_stateset = Conception.MuExS()
 
@@ -76,11 +76,11 @@ end
 @testset "linked_list_factory(N)" begin
     caseList = Samsara.linked_list_factory(1)
     @test length(caseList) == 1
-    @test isa(caseList[1], LinkedNode)
+    @test isa(caseList[1], LinkedCardinalNode)
     " factory with N=1 creates list of 1 linked_node "
 
     caseList = Samsara.linked_list_factory(3)
-    @test isa(caseList, Vector{LinkedNode})
+    @test isa(caseList, Vector{LinkedCardinalNode})
     @test length(caseList) == 3
     " With N = 3    =>     factory makes list of 3 nodes "
 

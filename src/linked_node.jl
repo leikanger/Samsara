@@ -7,7 +7,7 @@ each cartinal direction: N, S, E, W
 """
 abstract type EuclideanNode <: Conception.Time.TemporalType end
 
-""" LinkedNode is a node in a linked list, representing the states of a simulation.
+""" LinkedCardinalNode is a node in a linked list, representing the states of a simulation.
 Each node has a number of possible transitions, of which can be effectuated by events.
 This is perfect for emulating a system for IV-learning.
 
@@ -16,7 +16,7 @@ Each link is of type Conception.TemporalType (like SAT):
     have activation time, 
     and be a part of a MuExS.
 """
-mutable struct LinkedNode <: EuclideanNode
+mutable struct LinkedCardinalNode <: EuclideanNode
     _id
     _last_activation_interval
     _member_of_MuEx::Vector{Conception.MuExS}
@@ -24,7 +24,7 @@ mutable struct LinkedNode <: EuclideanNode
     _node_E::Union{Conception.Conception.TemporalType, Nothing}
     _node_W::Union{Conception.Conception.TemporalType, Nothing}
 
-    function LinkedNode(id=missing;
+    function LinkedCardinalNode(id=missing;
                         node_to_E =nothing,
                         node_to_W =nothing,
                         in_MuEx::Union{AbstractMuExS, Nothing}=nothing)
@@ -49,7 +49,7 @@ end
 """ show(IO, LinkeNode)
 Print LinkeNode with node_to_W and node_to_E, with '|' if absent.
 """
-function Base.show(io::IO, arg::LinkedNode)
+function Base.show(io::IO, arg::LinkedCardinalNode)
     if isnothing(arg._node_E)
         text_nE = "|"
     else
@@ -66,27 +66,27 @@ end
 """ _set_node_to_W!(nodeA, nodeB)
 Set note to the west of nodeA to become nodeB. Note that nodeB can be Nothing 
 """
-function _set_node_to_W!(nodeA::LinkedNode, nodeB::Union{LinkedNode, Nothing})
+function _set_node_to_W!(nodeA::LinkedCardinalNode, nodeB::Union{LinkedCardinalNode, Nothing})
     nodeA._node_W = nodeB
 end
 
 """ _set_node_to_E!(nodeA, nodeB)
 Set note to the west of nodeA to become nodeB. Note that nodeB can be Nothing 
 """
-function _set_node_to_E!(nodeA::LinkedNode, nodeB::Union{LinkedNode, Nothing})
+function _set_node_to_E!(nodeA::LinkedCardinalNode, nodeB::Union{LinkedCardinalNode, Nothing})
     nodeA._node_E = nodeB
 end
 
 function linked_list_factory(N::Int; in_MuExS =nothing)
-    retList = LinkedNode[]
+    retList = LinkedCardinalNode[]
     # first item      ( N > 0 )
-    previous_node = LinkedNode("n1", in_MuEx=in_MuExS)
+    previous_node = LinkedCardinalNode("n1", in_MuEx=in_MuExS)
     push!(retList, previous_node)
     N == 1 && return retList
     # .. then the rest ( N > 1 ) 
     #  split is made for the sake of registering _node_E
     for i in 2:N
-        the_node = LinkedNode("n"*string(i), in_MuEx=in_MuExS)
+        the_node = LinkedCardinalNode("n"*string(i), in_MuEx=in_MuExS)
         push!(retList, the_node)
         _set_node_to_E!(the_node, previous_node)
         _set_node_to_W!(previous_node, the_node)
