@@ -1,6 +1,12 @@
 using .Samsara, Conception
 using UUIDs, Random
 
+""" EuclideanNode is a (linked-list type) node with one one node in 
+each cartinal direction: N, S, E, W
+ ~> Implies some Euclidean properties
+"""
+abstract type EuclideanNode <: Conception.Time.TemporalType end
+
 """ LinkedNode is a node in a linked list, representing the states of a simulation.
 Each node has a number of possible transitions, of which can be effectuated by events.
 This is perfect for emulating a system for IV-learning.
@@ -10,7 +16,7 @@ Each link is of type Conception.TemporalType (like SAT):
     have activation time, 
     and be a part of a MuExS.
 """
-mutable struct LinkedNode <: Conception.TemporalType
+mutable struct LinkedNode <: EuclideanNode
     _id
     _last_activation_interval
     _member_of_MuEx::Vector{Conception.MuExS}

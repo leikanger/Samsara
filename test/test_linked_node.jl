@@ -4,10 +4,11 @@ using Samsara, Conception, Test
 @testset "LinkNode initiation" begin
     caseNode = Samsara.LinkedNode()
     @test isa(caseNode, Samsara.LinkedNode)
-    @test isa(caseNode, Conception.AbstractConcept)
-    " LinkedNode lager en struct av type Conception.AbstractConcept --- som også SAT gjør... "
+    @test isa(caseNode, Samsara.EuclideanNode)
+    @test isa(caseNode, Conception.Time.TemporalType)
+        " LinkedNode lager en struct av type Conception.AbstractConcept --- som også SAT gjør... "
 
-    @test LinkedNode("test")._id == "test"
+        @test LinkedNode("test")._id == "test"
 
     state_set = Conception.MuExS()
     caseNode = Samsara.LinkedNode(in_MuEx=state_set)
