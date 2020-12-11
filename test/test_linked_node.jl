@@ -139,5 +139,4 @@ end
     # TODO lag bra automatiserte testar for forrige opplegget! TODO
 end
 
-
 end #module TEST_LINKED_NODE

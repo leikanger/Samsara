@@ -48,9 +48,12 @@ include("circularsys.jl")
 #===========================================================================#
 
 export Samsara, AbstractSystem, dimensionality, system_state, step_system_mechanics!, set_action_in!           #EXPORT
+#export EuclideanNode
 
 include("linked_node.jl")
 export LinkedCardinalNode
 
+include("linked_gate.jl")
+export LinkedGate
 
 end # module
