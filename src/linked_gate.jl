@@ -22,8 +22,12 @@ end
 """ is_open(LinkedGate) 
 getter for whether gate is open or not """
 function gate_is_open(the_gate::LinkedGate)
-    the_gate._gate_is_open
+    isnothing(the_gate._conditioned_on_trait) && return the_gate._gate_is_open
+
+    return is_active(the_gate._conditioned_on_trait)
 end
+" convenience: Make for readable code "
+gate_is_closed(the_gate::LinkedGate) = !gate_is_open(the_gate)
 
 """ open_gate(the_gate)
 Open up the gate, such that activation of gate causes transmission from nodeA to nodeB or vice versa 

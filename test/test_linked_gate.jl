@@ -72,12 +72,15 @@ end
     - We're in n1, before the gate. 
     """
 
-
-    # Conditionals define whether gate is open or closed.
-    #   - Conditional is of type TemporalType (something that can be activated)
-    #   - Considional can be set by a function
-    #   - Conditional can be set by ctor.
-    #   - Conditional 
+    case = LinkedGate(n1, n2, conditional=SAT(:some_condition))
+    @test Samsara.gate_is_closed(case)
+    activate!(SAT(:some_condition))
+    @test Samsara.gate_is_open(case)
+    deactivate!(SAT(:some_condition))
+    @test Samsara.gate_is_closed(case)
+    """ The gate can be conditioned on some external trait: some SAT from ctor ~10 lines up 
+    When the gated SAT --SAT(:some_condition) in the example-- is active, gate is open 
+    """
 end
 
 
