@@ -27,8 +27,22 @@ function open_gate!(the_gate::LinkedGate, new_state=true)
 end
 
 
-""" activate!(LinkedGate)   => OPEN the gate
-activate port, i.e. open the gate
+""" activate!(LinkedGate)   =>  do the gate : try to enter
+activate port, i.e. try to enter
 (Extends Conception.activate!(..) -- but not TemporalType, since AbstractConcept is higher. 
 Therefore, I have to explicitly write Conception.activate! in the next sentence)
 """
+function Conception.activate!(the_gate::LinkedGate)
+    !gate_is_open(the_gate) && return
+
+    if is_active(the_gate.pre_node)
+        the_node = the_gate.pre_node
+        the_other_node = the_gate.post_node
+    else
+        the_node = the_gate.post_node
+        the_other_node = the_gate.pre_node
+    end
+
+    deactivate!(the_node)
+    activate!(the_other_node)
+end

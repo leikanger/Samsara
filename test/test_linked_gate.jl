@@ -16,6 +16,22 @@ using Samsara, Conception, Test
     @test Samsara.gate_is_open(case) == false 
     """ default value for a gate is 'closed' """
 
+end
+
+@testset "LinkedGate function: Opening, closing, activating, etc" begin
+    Conception.__purge_everything!!()
+
+    the_muex= MuExS()
+    n1 = SAT(:preNode, inMuExS=the_muex)
+    n2 = SAT(:postNode, inMuExS=the_muex)
+    activate!(n1)
+    @assert Conception.the_active_event_of(the_muex) == n1
+    case = LinkedGate(n1, n2)
+    """ Setting up the situation: 
+    - Gate n1 ⟶ n2      (n1 and n2 are MuExS)
+    - We're in n1, before the gate. 
+    """
+
     Samsara.open_gate!(case)
     @test Samsara.gate_is_open(case) == true
     Samsara.open_gate!(case, false)
@@ -24,17 +40,27 @@ using Samsara, Conception, Test
     @test Samsara.gate_is_open(case) == true
     """ explicit opening and closing the gate """
 
-    # When a gate:closed is activated, we "are" still at pre-node.
-    # When a gate:open is activated, we move to post-node.
-    #   => NOTE that pre-node and post-node changes: update this to be nodeL and nodeR instead.. 
-    #   - when in n1, activate! causes n2
-    #   - when in n2, activate! causes n1
+    Samsara.open_gate!(case, true)
+    activate!(case)
+    @test Conception.the_active_event_of(the_muex) == n2
+    activate!(case)
+    @test Conception.the_active_event_of(the_muex) == n1
+    activate!(case)
+    activate!(case)
+    @test Conception.the_active_event_of(the_muex) == n1
+    """ activate OPEN gate => move throught it """
+    
+    Samsara.open_gate!(case, false)
+    @assert Conception.the_active_event_of(the_muex) == n1
+    activate!(case)
+    @test Conception.the_active_event_of(the_muex) == n1
+    """ activate CLOSED gate => nothing happens """
+
     # Conditionals define whether gate is open or closed.
     #   - Conditional is of type TemporalType (something that can be activated)
     #   - Considional can be set by a function
     #   - Conditional can be set by ctor.
     #   - Conditional 
-
 
 end 
 
