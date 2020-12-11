@@ -55,13 +55,30 @@ end
     activate!(case)
     @test Conception.the_active_event_of(the_muex) == n1
     """ activate CLOSED gate => nothing happens """
+end 
+
+@testset "LinkedGate that is gated by an AbstractConcept activation" begin
+    Conception.__purge_everything!!()
+    the_muex= MuExS()
+    n1 = SAT(:preNode, inMuExS=the_muex)
+    n2 = SAT(:postNode, inMuExS=the_muex)
+    activate!(n1)
+    @assert Conception.the_active_event_of(the_muex) == n1
+    some_SAT = SAT(:conditional_SAT)
+    case = LinkedGate(n1, n2, conditional=some_SAT)
+    @test case._conditioned_on_trait == some_SAT
+    """ Setting up the situation: 
+    - Gate n1 ⟶ n2 | cSAT     (n1 and n2 are MuExS, cSAT is not.)
+    - We're in n1, before the gate. 
+    """
+
 
     # Conditionals define whether gate is open or closed.
     #   - Conditional is of type TemporalType (something that can be activated)
     #   - Considional can be set by a function
     #   - Conditional can be set by ctor.
     #   - Conditional 
+end
 
-end 
 
 end # module

@@ -3,13 +3,19 @@ using UUIDs, Random
 
 """ LinkedGate is a subtype of Conception.AbstractConcept 
 LinkedGate is a subtype of Conception.AbstractConcept to mark that it's not supposed to become part of hte history: It is not a temporal element, since a transition throught a gate happens instantaneosly.
+CTOR arguments:
+    - nodeA : node that can be activated, on one side of gate.
+    - nodeB : node that can be activated, on one side of gate.
+    - condition : node that can be activated; gate keeper.
 """
 mutable struct LinkedGate <: Conception.AbstractConcept
     pre_node
     post_node
     _gate_is_open
-    function LinkedGate(nodeA::T, nodeB::T) where {T <: Conception.AbstractConcept}
-        new(nodeA, nodeB, false)
+    _conditioned_on_trait
+    function LinkedGate(nodeA::T, nodeB::T; conditional::Union{T, Nothing}=nothing) where
+                {T <: Conception.AbstractConcept}
+        new(nodeA, nodeB, false, conditional)
     end
 end
 
