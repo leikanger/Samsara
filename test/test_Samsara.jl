@@ -1,5 +1,5 @@
 module TEST_SAMSARA
-using Samsara, Test
+using Samsara, Test, Conception
 
 @testset "system initiation" begin
     DemoSys = Samsara.DemoSys
@@ -61,5 +61,16 @@ using Samsara, Test
         Funksjonane kan vidare undersøke om event-SAT er aktiv:  BAM! gjennom:    HAL.still_active(SAT) 
     """
 end#testset
+
+@testset "Tests involving LinkedLists with LinkedGate" begin
+    the_muex = MuExS()
+    LinkedCardinalNode(:Ω, in_MuEx=the_muex)
+    # TODO Make it possible to create LinkedGate ctor without end-nodes (and then add end-nodes after..)
+    # Default end-node if arg=nothing?
+    # TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO 
+    LinkedGate(id=:door, in_MuExS=the_muex)
+    linear_list = Samsara.linked_list_factory(5, in_MuExS=the_muex)
+    @show the_muex
+end
 
 end#module TEST_SAMSARA
