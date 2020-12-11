@@ -22,8 +22,8 @@ end
 """ open_gate(the_gate)
 Open up the gate, such that activation of gate causes transmission from nodeA to nodeB or vice versa 
 """
-function open_gate!(the_gate::LinkedGate)
-    the_gate._gate_is_open = true
+function open_gate!(the_gate::LinkedGate, new_state=true)
+    the_gate._gate_is_open = new_state
 end
 
 

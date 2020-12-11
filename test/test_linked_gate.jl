@@ -18,10 +18,17 @@ using Samsara, Conception, Test
 
     Samsara.open_gate!(case)
     @test Samsara.gate_is_open(case) == true
-    """ after "activating" the gate, i.e. opening it, the gate is open """
+    Samsara.open_gate!(case, false)
+    @test Samsara.gate_is_open(case) == false
+    Samsara.open_gate!(case, true)
+    @test Samsara.gate_is_open(case) == true
+    """ explicit opening and closing the gate """
 
     # When a gate:closed is activated, we "are" still at pre-node.
     # When a gate:open is activated, we move to post-node.
+    #   => NOTE that pre-node and post-node changes: update this to be nodeL and nodeR instead.. 
+    #   - when in n1, activate! causes n2
+    #   - when in n2, activate! causes n1
     # Conditionals define whether gate is open or closed.
     #   - Conditional is of type TemporalType (something that can be activated)
     #   - Considional can be set by a function
