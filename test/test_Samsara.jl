@@ -62,14 +62,42 @@ using Samsara, Test, Conception
     """
 end#testset
 
+function traverse_MuExS_from(start_node::T, the_muex::Conception.MuExS;
+            direction =:West) where {T <: LinkedCardinalNode}
+    the_item = start_node
+    number_of_nodes = 0
+    # Samsara.open_gate!(the_gate, false)
+    @show :asdf, the_item
+    while !isnothing(the_item) 
+        direction == :West && activate!(Samsara.west_of(the_item))
+        direction == :East && activate!(Samsara.east_of(the_item))
+        the_item = Conception.the_active_event_of(the_muex)
+        number_of_nodes+=1
+    end
+    return number_of_nodes
+end
+
 @testset "Tests involving LinkedLists with LinkedGate" begin
     the_muex = MuExS()
-    LinkedCardinalNode(:Ω, in_MuEx=the_muex)
-    # TODO Make it possible to create LinkedGate ctor without end-nodes (and then add end-nodes after..)
-    # Default end-node if arg=nothing?
-    # TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO 
-    # LinkedGate(id=:door, in_MuExS=the_muex)
+    first_link = LinkedCardinalNode(:Ω, in_MuEx=the_muex)
+    the_gate = LinkedGate(first_link)
+    Samsara._set_node_to_W!(first_link, the_gate)
     linear_list = Samsara.linked_list_factory(5, in_MuExS=the_muex)
+    Samsara.gate_set_connected_node!(the_gate, linear_list[1])
+    Samsara._set_node_to_E!(linear_list[1], the_gate)
+
+    number_of_nodes = traverse_MuExS_from(the_muex._elements[1], the_muex)
+    @test number_of_nodes == 1
+    """ Gate:CLOSED -- iteration through the goes through all elements BEFORE gate. """
+
+    """ Gate:OPEN -- iteration through the goes through all elements gate. """
+
+    @show :NEIDA, number_of_nodes
+    for it ∈ enumerate(the_muex)
+        @show it
+    end
+
+    @show "The MUEX                       HER"
     @show the_muex
 end
 

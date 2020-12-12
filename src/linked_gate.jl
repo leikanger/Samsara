@@ -9,6 +9,7 @@ CTOR arguments:
     - condition : node that can be activated; gate keeper.
 """
 mutable struct LinkedGate <: Conception.AbstractConcept
+    _id
     pre_node
     post_node
     _gate_is_open
@@ -16,7 +17,7 @@ mutable struct LinkedGate <: Conception.AbstractConcept
     function LinkedGate(nodeA::T, nodeB::Union{T, Nothing}=nothing; 
                         conditional::Union{T, Nothing}=nothing) where
                             {T <: Conception.AbstractConcept}
-        new(nodeA, nodeB, false, conditional)
+        new("gate", nodeA, nodeB, false, conditional)
     end
 end
 

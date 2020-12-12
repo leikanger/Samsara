@@ -21,8 +21,8 @@ mutable struct LinkedCardinalNode <: EuclideanNode
     _last_activation_interval
     _member_of_MuEx::Vector{Conception.MuExS}
      _incoming_asscon # Trengs denne?
-    _node_E::Union{Conception.Conception.TemporalType, Nothing}
-    _node_W::Union{Conception.Conception.TemporalType, Nothing}
+    _node_E::Union{Conception.Conception.AbstractConcept, Nothing}
+    _node_W::Union{Conception.Conception.AbstractConcept, Nothing}
 
     function LinkedCardinalNode(id=missing;
                         node_to_E =nothing,
@@ -66,14 +66,16 @@ end
 """ _set_node_to_W!(nodeA, nodeB)
 Set note to the west of nodeA to become nodeB. Note that nodeB can be Nothing 
 """
-function _set_node_to_W!(nodeA::LinkedCardinalNode, nodeB::Union{LinkedCardinalNode, Nothing})
+function _set_node_to_W!(nodeA::Conception.AbstractConcept, 
+                         nodeB::Union{Conception.AbstractConcept, Nothing})
     nodeA._node_W = nodeB
 end
 
 """ _set_node_to_E!(nodeA, nodeB)
 Set note to the west of nodeA to become nodeB. Note that nodeB can be Nothing 
 """
-function _set_node_to_E!(nodeA::LinkedCardinalNode, nodeB::Union{LinkedCardinalNode, Nothing})
+function _set_node_to_E!(nodeA::Conception.AbstractConcept, 
+                         nodeB::Union{Conception.AbstractConcept, Nothing})
     nodeA._node_E = nodeB
 end
 
