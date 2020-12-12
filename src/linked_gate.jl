@@ -37,6 +37,11 @@ ARG:
     - node : Any node of type Conception.AbstractConcept ~~ struct that support activate! function.
 """
 function gate_set_connected_node!(the_gate::LinkedGate, node::Conception.AbstractConcept)
+    !isnothing(the_gate.post_node) && throw(ArgumentError("can't reset an allready set gate"))
+    the_gate.post_node = node
+end
+function gate_set_connected_node!(the_gate::LinkedGate, Nothing)
+    the_gate.post_node = nothing
 end
 
 """ open_gate(the_gate)

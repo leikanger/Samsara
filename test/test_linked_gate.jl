@@ -25,7 +25,16 @@ end
     " gate can also be contructed with only one side defined "
 
     Samsara.gate_set_connected_node!(case, SAT(:to))
-    #@test case.post_node == SAT(:to)
+    @test case.post_node == SAT(:to)
+    " We can set post-node by gate_set_connected_node!(gate, node) "
+
+    @test_throws ArgumentError Samsara.gate_set_connected_node!(case, SAT(:whatever))  
+    " Cannot reset an allready set gate.. "
+
+    Samsara.gate_set_connected_node!(case, nothing)
+    @test isnothing(case.post_node)
+    " ... unless we set it to nothing "
+
 end
 
 @testset "LinkedGate function: Opening, closing, activating, etc" begin
