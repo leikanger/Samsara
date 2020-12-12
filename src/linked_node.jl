@@ -77,6 +77,20 @@ function _set_node_to_E!(nodeA::LinkedCardinalNode, nodeB::Union{LinkedCardinalN
     nodeA._node_E = nodeB
 end
 
+""" east_of(node)
+return the node that lies to the east of node::LinkedCardinalNode)
+"""
+function east_of(node::LinkedCardinalNode)
+    return node._node_E
+end
+
+""" west_of(node)
+return the node that lies to the west of node::LinkedCardinalNode)
+"""
+function west_of(node::LinkedCardinalNode)
+    return node._node_W
+end
+
 function linked_list_factory(N::Int; in_MuExS =nothing)
     retList = LinkedCardinalNode[]
     # first item      ( N > 0 )

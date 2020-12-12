@@ -30,6 +30,10 @@ using Samsara, Conception, Test
     @test caseNode._node_W == node1
     " LinkedCardinalNode can have node to West and node to East, set by constructor "
     
+    @test Samsara.east_of(caseNode) == node3
+    @test Samsara.west_of(caseNode) == node1
+    " convence functions: east of, west of, ... "
+
     other_node = LinkedCardinalNode() 
     @test LinkedCardinalNode()._id != other_node._id
     " Constructed LinkedCardinalNode without id-arg are assigned unique id values "
