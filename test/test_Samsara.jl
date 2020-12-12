@@ -102,6 +102,12 @@ end
     @test number_of_nodes == 6
     """ Gate:OPEN -- iteration through the goes through all elements gate. """
 
+    # We are at last link: Traverse back, but to a closed gate:
+    Samsara.open_gate!(the_gate, false)
+    number_of_nodes = traverse_MuExS(the_muex, direction=:West)
+    @test number_of_nodes == 5
+    """ Gate:CLOSED -- Traverse back (to the gate). """
+
     # PLAN
     # - sett nøkkelen til gate til å være en SAT: Sett til SAT(c)
     # - kjør random walk. Test IV for SAT(a) mtp. Ω , når gate er åpen, når gate er stengd.
