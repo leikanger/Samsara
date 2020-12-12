@@ -13,8 +13,9 @@ mutable struct LinkedGate <: Conception.AbstractConcept
     post_node
     _gate_is_open
     _conditioned_on_trait
-    function LinkedGate(nodeA::T, nodeB::T; conditional::Union{T, Nothing}=nothing) where
-                {T <: Conception.AbstractConcept}
+    function LinkedGate(nodeA::T, nodeB::Union{T, Nothing}=nothing; 
+                        conditional::Union{T, Nothing}=nothing) where
+                            {T <: Conception.AbstractConcept}
         new(nodeA, nodeB, false, conditional)
     end
 end
@@ -44,6 +45,9 @@ Therefore, I have to explicitly write Conception.activate! in the next sentence)
 """
 function Conception.activate!(the_gate::LinkedGate)
     !gate_is_open(the_gate) && return
+    # Letting MuExS handle eactivation, and activate!(nothing) just return, 
+    #   a closed gate does not cause anything // works by default.
+    # ~> isnothing(the_gate.post_node) && return # Ikkje naudsynt!
 
     if is_active(the_gate.pre_node)
         the_node = the_gate.pre_node
@@ -53,6 +57,5 @@ function Conception.activate!(the_gate::LinkedGate)
         the_other_node = the_gate.pre_node
     end
 
-    deactivate!(the_node)
     activate!(the_other_node)
 end

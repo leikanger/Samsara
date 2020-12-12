@@ -2,7 +2,7 @@ module TEST_LINKED_GATE
 using Samsara, Conception, Test
 
 
-@testset "LinkedGate" begin
+@testset "LinkedGate construction -- with end-nodes" begin
     n1, n2 = SAT(:preNode), SAT(:postNode)
     case = LinkedGate(n1, n2)
 
@@ -15,6 +15,11 @@ using Samsara, Conception, Test
 
     @test Samsara.gate_is_open(case) == false 
     """ default value for a gate is 'closed' """
+end
+
+@testset "LinkedGate with only one side -- empty end-node" begin
+    fromSAT = SAT(:from)
+    case = LinkedGate(fromSAT)
 
 end
 
@@ -49,6 +54,13 @@ end
     activate!(case)
     @test Conception.the_active_event_of(the_muex) == n1
     """ activate OPEN gate => move throught it """
+
+    oneSidedCase = LinkedGate(n1)
+    Samsara.open_gate!(oneSidedCase)
+    @assert is_active(n1)
+    activate!(oneSidedCase)
+    @test is_active(n1)
+    """ One-sided case (with nodeB = nothing) does not transfer to 'other side': All ok """
     
     Samsara.open_gate!(case, false)
     @assert Conception.the_active_event_of(the_muex) == n1

@@ -68,7 +68,7 @@ end#testset
     # TODO Make it possible to create LinkedGate ctor without end-nodes (and then add end-nodes after..)
     # Default end-node if arg=nothing?
     # TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO 
-    LinkedGate(id=:door, in_MuExS=the_muex)
+    # LinkedGate(id=:door, in_MuExS=the_muex)
     linear_list = Samsara.linked_list_factory(5, in_MuExS=the_muex)
     @show the_muex
 end
