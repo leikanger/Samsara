@@ -104,8 +104,8 @@ function linked_list_factory(N::Int; in_MuExS =nothing)
     for i in 2:N
         the_node = LinkedCardinalNode("n"*string(i), in_MuEx=in_MuExS)
         push!(retList, the_node)
-        _set_node_to_E!(the_node, previous_node)
-        _set_node_to_W!(previous_node, the_node)
+        _set_node_to_W!(the_node, previous_node)
+        _set_node_to_E!(previous_node, the_node)
         previous_node = the_node
     end
     retList

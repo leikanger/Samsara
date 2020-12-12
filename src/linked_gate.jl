@@ -21,6 +21,14 @@ mutable struct LinkedGate <: Conception.AbstractConcept
     end
 end
 
+""" show(IO, LinkeGate)
+Print LinkeGate as { < > , <|> } for {opened, closed}
+"""
+function Base.show(io::IO, arg::LinkedGate)
+    text_state = gate_is_open(arg) ? ' ' : '|'
+    print(io, "<"*text_state*">")
+end
+
 """ is_open(LinkedGate) 
 getter for whether gate is open or not """
 function gate_is_open(the_gate::LinkedGate)
@@ -71,6 +79,6 @@ function Conception.activate!(the_gate::LinkedGate)
         the_node = the_gate.post_node
         the_other_node = the_gate.pre_node
     end
-
+    #println("activate gate: "*string(the_node)*"→"*string(the_other_node))
     activate!(the_other_node)
 end
