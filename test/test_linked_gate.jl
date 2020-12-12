@@ -20,7 +20,12 @@ end
 @testset "LinkedGate with only one side -- empty end-node" begin
     fromSAT = SAT(:from)
     case = LinkedGate(fromSAT)
+    @test case.pre_node == fromSAT
+    @test isnothing(case.post_node)
+    " gate can also be contructed with only one side defined "
 
+    Samsara.gate_set_connected_node!(case, SAT(:to))
+    #@test case.post_node == SAT(:to)
 end
 
 @testset "LinkedGate function: Opening, closing, activating, etc" begin

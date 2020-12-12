@@ -30,6 +30,15 @@ end
 " convenience: Make for readable code "
 gate_is_closed(the_gate::LinkedGate) = !gate_is_open(the_gate)
 
+""" gate_set_connected_node!*(gate, node)
+Set connected node in a gate WITH NOTHING on other side // requires an uninitialized gate.
+ARG:
+    - gate : An uninitialized gate of type LinkedGate
+    - node : Any node of type Conception.AbstractConcept ~~ struct that support activate! function.
+"""
+function gate_set_connected_node!(the_gate::LinkedGate, node::Conception.AbstractConcept)
+end
+
 """ open_gate(the_gate)
 Open up the gate, such that activation of gate causes transmission from nodeA to nodeB or vice versa 
 """
