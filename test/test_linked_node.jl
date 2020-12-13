@@ -17,8 +17,6 @@ using Samsara, Conception, Test
     @test Conception.exists_in_MuExS(caseNode, state_set)
     " Lage en LinkedCardinalNode => registreres i arg: [in_MuEx] "
 
-    @show(caseNode)
-
     @test isnothing(caseNode._node_W)
     @test isnothing(caseNode._node_E)
     " Default neste node (i retning E og W) er nothing "
@@ -37,8 +35,6 @@ using Samsara, Conception, Test
     " convence functions: east of, west of, ... "
 
     other_node = LinkedCardinalNode() 
-    @show typeof(other_node)
-    @show other_node._node, LinkedCardinalNode()
     @test get_id(LinkedCardinalNode()) != get_id(other_node)
     " Constructed LinkedCardinalNode without id-arg are assigned unique id values "
 
@@ -111,7 +107,6 @@ end
     muex = Conception.MuExS()
     @assert !isnothing(muex)
     caseList = Samsara.linked_list_factory(3, in_MuExS=muex)
-    @show muex
     for item in caseList
         @test item._node ∈ muex._elements
     end

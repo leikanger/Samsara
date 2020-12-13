@@ -133,7 +133,6 @@ function west_of(node::SAT)
 end
 
 function linked_list_factory(N::Int; in_MuExS =nothing)
-        @show typeof(in_MuExS)
     retList = LinkedCardinalNode[]
     # first item      ( N > 0 )
     previous_node = LinkedCardinalNode("n1", in_MuEx=in_MuExS)
@@ -143,8 +142,6 @@ function linked_list_factory(N::Int; in_MuExS =nothing)
     #  split is made for the sake of registering _node_E
     for i in 2:N
         the_node = LinkedCardinalNode(SAT("n"*string(i), inMuExS=in_MuExS))
-        @show the_node
-        @show in_MuExS
         #the_node = LinkedCardinalNode("n"*string(i), in_MuEx=in_MuExS)
         push!(retList, the_node)
         _set_node_to_W!(the_node, previous_node)
