@@ -108,8 +108,11 @@ end
     """ Gate:CLOSED -- Traverse back (to the gate). """
 
     # PLAN
-    # - sett nøkkelen til gate til å være en SAT: Sett til SAT(c)
+    # - sett nøkkelen til gate til å være en SAT: SAT(:door_open)
+    #   -> SettSett slik at SAT(c) => SAT(:door_open)       (allerede impl. for SAT-conditional)
     # - kjør random walk. Test IV for SAT(a) mtp. Ω , når gate er åpen, når gate er stengd.
+    #   -> Du kan tenke: SAT(:door_open) som satA, og satB, satA som events på veg mot satOmega: 
+    #       (blir nesten som Q-learning! IV-learning med state-SAT som actions!)
 end
 
 end#module TEST_SAMSARA
