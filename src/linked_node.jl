@@ -17,33 +17,34 @@ Each link is of type Conception.TemporalType (like SAT):
     and be a part of a MuExS.
 """
 mutable struct LinkedCardinalNode <: EuclideanNode
-    _id
-    _last_activation_interval
-    _member_of_MuEx::Vector{Conception.MuExS}
-     _incoming_asscon # Trengs denne?
+    _node::Conception.AbstractConcept
     _node_E::Union{Conception.Conception.AbstractConcept, Nothing}
     _node_W::Union{Conception.Conception.AbstractConcept, Nothing}
 
     function LinkedCardinalNode(id=missing;
                         node_to_E =nothing,
                         node_to_W =nothing,
+                        connected_T=nothing,
                         in_MuEx::Union{AbstractMuExS, Nothing}=nothing)
         # Id
-        # Id can be anything, e.g. (parameter, value)-tuple?
-        if ismissing(id)
-            uuid = UUIDs.uuid1(Random.MersenneTwister())
-            id = "N_"*SubString(string(uuid), 1:8)
-        end
-        # MuExS
-        set_of_MuExS = AbstractMuExS[]
-        !isnothing(in_MuEx) && push!(set_of_MuExS, in_MuEx)
+        the_SAT = SAT(id, inMuExS=in_MuEx, connected_with=connected_T)
         # Init
-        the_node = new(id, Tuple{}(), set_of_MuExS, AssociativeLink[], node_to_E, node_to_W)
+        the_node = new(the_SAT, node_to_E, node_to_W)
 
-        Conception.add_element_to_MuExS!(in_MuEx, the_node)
+        #Conception.add_element_to_MuExS!(in_MuEx, the_node)
 
+        push!(_all_known_CartinalNodes, the_node)
         return the_node
     end
+end
+
+_all_known_CartinalNodes = Samsara.LinkedCardinalNode[]
+
+" member of muex, forwarded to node "
+member_of_MuExS(it::LinkedCardinalNode) = it._node.member_of_MuExS
+
+function Conception.activate!(it::LinkedCardinalNode)
+    activate!(it._node)
 end
 
 """ show(IO, LinkeNode)
@@ -53,15 +54,17 @@ function Base.show(io::IO, arg::LinkedCardinalNode)
     if isnothing(arg._node_E)
         text_nE = "|"
     else
-        text_nE = string(arg._node_E._id)
+        text_nE = get_id(arg._node_E)
     end
     if isnothing(arg._node_W)
         text_nW = "|"
     else
-        text_nW = string(arg._node_W._id)
+        text_nW = get_id(arg._node_W)
     end
-    print(io, "[ "*text_nE*"→|"*string(arg._id)*"|→"*text_nW*" ]")
+    print(io, "[ "*text_nE*"→|"*get_id(arg._node)*"|→"*text_nW*" ]")
 end
+
+Conception.get_id(it::LinkedCardinalNode) = get_id(it._node)
 
 """ _set_node_to_W!(nodeA, nodeB)
 Set note to the west of nodeA to become nodeB. Note that nodeB can be Nothing 
@@ -85,12 +88,31 @@ return the node that lies to the east of node::LinkedCardinalNode)
 function east_of(node::LinkedCardinalNode)
     return node._node_E
 end
+""" east_of(node) implemented for SAT (the content) """
+function east_of(node::SAT)
+    @show _all_known_CartinalNodes
+    for it in _all_known_CartinalNodes
+        if it._node == node
+            east_of(it)
+        end
+    end
+    nothing
+end
 
 """ west_of(node)
 return the node that lies to the west of node::LinkedCardinalNode)
 """
 function west_of(node::LinkedCardinalNode)
     return node._node_W
+end
+""" west_of(node) implemented for SAT (the content) """
+function west_of(node::SAT)
+    for it in _all_known_CartinalNodes
+        if it._node == node
+            west_of(it)
+        end
+    end
+    nothing
 end
 
 function linked_list_factory(N::Int; in_MuExS =nothing)

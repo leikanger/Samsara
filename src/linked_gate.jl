@@ -21,6 +21,8 @@ mutable struct LinkedGate <: Conception.AbstractConcept
     end
 end
 
+Conception.get_id(it::LinkedGate) = string(it)
+
 """ show(IO, LinkeGate)
 Print LinkeGate as { < > , <|> } for {opened, closed}
 """

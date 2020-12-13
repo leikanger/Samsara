@@ -63,8 +63,7 @@ using Printf
     """
 end#testset
 
-function traverse_MuExS(the_muex::Conception.MuExS;
-            direction =:East) where {T <: LinkedCardinalNode}
+function traverse_MuExS(the_muex::Conception.MuExS; direction =:East)
     the_item = Conception.the_active_event_of(the_muex)
     number_of_nodes = 0
     while !isnothing(the_item) 
