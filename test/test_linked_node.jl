@@ -2,16 +2,18 @@ module TEST_LINKED_NODE
 using Samsara, Conception, Test
 
 @testset "LinkNode initiation" begin
+    Conception.__purge_everything!!()
+
     caseNode = Samsara.LinkedCardinalNode()
     @test isa(caseNode, Samsara.LinkedCardinalNode)
     @test isa(caseNode, Samsara.EuclideanNode)
     @test isa(caseNode, Conception.Time.TemporalType)
-        " LinkedCardinalNode lager en struct av type Conception.AbstractConcept --- som også SAT gjør... "
+    " LinkedCardinalNode lager en struct av type Conception.AbstractConcept --- som også SAT gjør... "
 
-    @test LinkedCardinalNode("test")._id == "test"
+    @test get_id(LinkedCardinalNode("test")) == "test"
 
     state_set = Conception.MuExS()
-    caseNode = Samsara.LinkedCardinalNode(in_MuEx=state_set)
+    caseNode = Samsara.LinkedCardinalNode(:asdffdsa, in_MuEx=state_set)
     @test Conception.exists_in_MuExS(caseNode, state_set)
     " Lage en LinkedCardinalNode => registreres i arg: [in_MuEx] "
 
@@ -35,7 +37,7 @@ using Samsara, Conception, Test
     " convence functions: east of, west of, ... "
 
     other_node = LinkedCardinalNode() 
-    @test LinkedCardinalNode()._id != other_node._id
+    @test get_id(LinkedCardinalNode()) != get_id(other_node)
     " Constructed LinkedCardinalNode without id-arg are assigned unique id values "
 
     node1 = LinkedCardinalNode(:1)
@@ -68,7 +70,7 @@ end
     @test length(muex._elements) == 1
     activate!(n1)
     @test is_active(n1)
-    @test muex._active_element == n1
+    @test muex._active_element == n1._node
     " LinkedCardinalNode fungerer som TemporalType, dvs. likestilt med SAT! "
 
     muex_stateset = Conception.MuExS()
@@ -105,14 +107,14 @@ end
     caseList = Samsara.linked_list_factory(3, in_MuExS=muex)
     @show muex
     for item in caseList
-        @test item ∈ muex._elements
+        @test item._node ∈ muex._elements
     end
     """ LL_factory(N, in_MuExS) lager elementer i muex [in_MuExS] -- 
     det er enkelt å sette MuExS ved arg i LL_factory """
 
     for item in caseList
         activate!(item)
-        @test Conception.the_active_event_of(muex) == item
+        @test Conception.the_active_event_of(muex) == item._node
         " The activating an item causes that item to be active in that muex.. (verifying  "
     end
     for i in 2:length(caseList)

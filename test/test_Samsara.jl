@@ -69,6 +69,7 @@ function traverse_MuExS(the_muex::Conception.MuExS; direction =:East)
     while !isnothing(the_item) 
         number_of_nodes+=1
         last_item = the_item
+        @show the_item, Samsara.east_of(the_item)
         direction == :West && activate!(Samsara.west_of(the_item))
         direction == :East && activate!(Samsara.east_of(the_item))
         if last_item == (the_item = Conception.the_active_event_of(the_muex))

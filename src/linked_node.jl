@@ -7,6 +7,9 @@ each cartinal direction: N, S, E, W
 """
 abstract type EuclideanNode <: Conception.Time.TemporalType end
 
+
+_all_known_CartinalNodes = Samsara.EuclideanNode[]
+
 """ LinkedCardinalNode is a node in a linked list, representing the states of a simulation.
 Each node has a number of possible transitions, of which can be effectuated by events.
 This is perfect for emulating a system for IV-learning.
@@ -21,13 +24,14 @@ mutable struct LinkedCardinalNode <: EuclideanNode
     _node_E::Union{Conception.Conception.AbstractConcept, Nothing}
     _node_W::Union{Conception.Conception.AbstractConcept, Nothing}
 
-    function LinkedCardinalNode(id=missing;
+    function LinkedCardinalNode(id=nothing;
                         node_to_E =nothing,
                         node_to_W =nothing,
                         connected_T=nothing,
                         in_MuEx::Union{AbstractMuExS, Nothing}=nothing)
         # Id
-        the_SAT = SAT(id, inMuExS=in_MuEx, connected_with=connected_T)
+        the_SAT = SAT(id, inMuExS=in_MuEx) # TODO, connected_with=connected_T)
+
         # Init
         the_node = new(the_SAT, node_to_E, node_to_W)
 
@@ -38,7 +42,13 @@ mutable struct LinkedCardinalNode <: EuclideanNode
     end
 end
 
-_all_known_CartinalNodes = Samsara.LinkedCardinalNode[]
+function Conception.get_id(it::LinkedCardinalNode)
+    get_id(it._node)
+end
+
+Conception.is_active(it::LinkedCardinalNode) = is_active(it._node)
+Conception.exists_in_MuExS(caseNode::LinkedCardinalNode, state_set::Conception.MuExS) = Conception.exists_in_MuExS(caseNode._node, state_set)
+
 
 " member of muex, forwarded to node "
 member_of_MuExS(it::LinkedCardinalNode) = it._node.member_of_MuExS
@@ -54,17 +64,15 @@ function Base.show(io::IO, arg::LinkedCardinalNode)
     if isnothing(arg._node_E)
         text_nE = "|"
     else
-        text_nE = get_id(arg._node_E)
+        text_nE = string(get_id(arg._node_E))
     end
     if isnothing(arg._node_W)
         text_nW = "|"
     else
-        text_nW = get_id(arg._node_W)
+        text_nW = string(get_id(arg._node_W))
     end
-    print(io, "[ "*text_nE*"→|"*get_id(arg._node)*"|→"*text_nW*" ]")
+    print(io, "[ "*text_nE*"→|"*string(get_id(arg._node))*"|→"*text_nW*" ]")
 end
-
-Conception.get_id(it::LinkedCardinalNode) = get_id(it._node)
 
 """ _set_node_to_W!(nodeA, nodeB)
 Set note to the west of nodeA to become nodeB. Note that nodeB can be Nothing 
@@ -82,6 +90,16 @@ function _set_node_to_E!(nodeA::Conception.AbstractConcept,
     nodeA._node_E = nodeB
 end
 
+" Find link that contains SAT "
+function find_link_with_SAT(node::SAT)
+    for it in _all_known_CartinalNodes
+        if it._node == node
+            return it
+        end
+    end
+    return nothing
+end
+
 """ east_of(node)
 return the node that lies to the east of node::LinkedCardinalNode)
 """
@@ -90,13 +108,7 @@ function east_of(node::LinkedCardinalNode)
 end
 """ east_of(node) implemented for SAT (the content) """
 function east_of(node::SAT)
-    @show _all_known_CartinalNodes
-    for it in _all_known_CartinalNodes
-        if it._node == node
-            east_of(it)
-        end
-    end
-    nothing
+    east_of(find_link_with_SAT(node))
 end
 
 """ west_of(node)
@@ -107,12 +119,7 @@ function west_of(node::LinkedCardinalNode)
 end
 """ west_of(node) implemented for SAT (the content) """
 function west_of(node::SAT)
-    for it in _all_known_CartinalNodes
-        if it._node == node
-            west_of(it)
-        end
-    end
-    nothing
+    west_of(find_link_with_SAT(node))
 end
 
 function linked_list_factory(N::Int; in_MuExS =nothing)
