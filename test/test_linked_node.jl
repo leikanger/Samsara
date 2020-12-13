@@ -37,6 +37,8 @@ using Samsara, Conception, Test
     " convence functions: east of, west of, ... "
 
     other_node = LinkedCardinalNode() 
+    @show typeof(other_node)
+    @show other_node._node, LinkedCardinalNode()
     @test get_id(LinkedCardinalNode()) != get_id(other_node)
     " Constructed LinkedCardinalNode without id-arg are assigned unique id values "
 
@@ -104,6 +106,7 @@ end
     " linked_list_factory(N) integration test: creates a doubly-linked list of N elements "
 
     muex = Conception.MuExS()
+    @show muex
     caseList = Samsara.linked_list_factory(3, in_MuExS=muex)
     @show muex
     for item in caseList

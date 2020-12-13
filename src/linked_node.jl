@@ -30,15 +30,25 @@ mutable struct LinkedCardinalNode <: EuclideanNode
                         connected_T=nothing,
                         in_MuEx::Union{AbstractMuExS, Nothing}=nothing)
         # Id
-        the_SAT = SAT(id, inMuExS=in_MuEx) # TODO, connected_with=connected_T)
+        the_SAT = SAT(id, inMuExS=in_MuEx, connected_with=connected_T)
 
-        # Init
+        LinkedCardinalNode(the_SAT, node_to_E=node_to_E, node_to_W=node_to_W)
+        
+        #= # Init
         the_node = new(the_SAT, node_to_E, node_to_W)
 
         #Conception.add_element_to_MuExS!(in_MuEx, the_node)
 
         push!(_all_known_CartinalNodes, the_node)
         return the_node
+        =#
+    end
+    function LinkedCardinalNode(sat_arg::SAT;
+                        node_to_E =nothing,
+                        node_to_W =nothing)
+        the_node = new(sat_arg, node_to_E, node_to_W)
+        push!(_all_known_CartinalNodes, the_node)
+        the_node
     end
 end
 
@@ -123,6 +133,7 @@ function west_of(node::SAT)
 end
 
 function linked_list_factory(N::Int; in_MuExS =nothing)
+        @show typeof(in_MuExS)
     retList = LinkedCardinalNode[]
     # first item      ( N > 0 )
     previous_node = LinkedCardinalNode("n1", in_MuEx=in_MuExS)
@@ -131,7 +142,10 @@ function linked_list_factory(N::Int; in_MuExS =nothing)
     # .. then the rest ( N > 1 ) 
     #  split is made for the sake of registering _node_E
     for i in 2:N
-        the_node = LinkedCardinalNode("n"*string(i), in_MuEx=in_MuExS)
+        the_node = LinkedCardinalNode(SAT("n"*string(i), inMuExS=in_MuExS))
+        @show the_node
+        @show typeof(in_MuExS)
+        #the_node = LinkedCardinalNode("n"*string(i), in_MuEx=in_MuExS)
         push!(retList, the_node)
         _set_node_to_W!(the_node, previous_node)
         _set_node_to_E!(previous_node, the_node)
