@@ -87,6 +87,7 @@ end
     @test isa(caseList[1], LinkedCardinalNode)
     " factory with N=1 creates list of 1 linked_node "
 
+    Conception.__purge__all_SAT!!()
     caseList = Samsara.linked_list_factory(3)
     @test isa(caseList, Vector{LinkedCardinalNode})
     @test length(caseList) == 3
@@ -96,6 +97,7 @@ end
     @test caseList[2]._node_W == caseList[1]
     " Element 1 er East for node 2, og element 2 er West for node 1 "
 
+    Conception.__purge__all_SAT!!()
     caseList = Samsara.linked_list_factory(5)
     for i in 2:length(caseList)-1
         @test caseList[i]._node_E == caseList[i+1]
@@ -105,8 +107,9 @@ end
     @test caseList[end]._node_W == caseList[end-1]
     " linked_list_factory(N) integration test: creates a doubly-linked list of N elements "
 
+    Conception.__purge_everything!!()
     muex = Conception.MuExS()
-    @show muex
+    @assert !isnothing(muex)
     caseList = Samsara.linked_list_factory(3, in_MuExS=muex)
     @show muex
     for item in caseList
@@ -121,7 +124,7 @@ end
         " The activating an item causes that item to be active in that muex.. (verifying  "
     end
     for i in 2:length(caseList)
-        @test length(caseList[i]._incoming_asscon) == 0
+        @test length(caseList[i]._node._incoming_asscon) == 0
     end
     """ .. but the lenght of incoming asscons are 0 (since no concurrent event happened
     while traversing the linked state-list """
@@ -129,11 +132,11 @@ end
     for item in caseList
         activate!(item)
         activate!(SAT(:some_action))
-        @test Conception.the_active_event_of(muex) == item
+        @test Conception.the_active_event_of(muex) == item._node
     end
     for i in 2:length(caseList)
-        @test caseList[i]._incoming_asscon[1].nodeL == caseList[i-1]
-        @test caseList[i]._incoming_asscon[1].nodeR == SAT(:some_action)
+        @test caseList[i]._node._incoming_asscon[1].nodeL == caseList[i-1]._node
+        @test caseList[i]._node._incoming_asscon[1].nodeR == SAT(:some_action)
     end
     """ incoming asscons is sorted, such that the first element is the most recent in history;
     This test verifies that each element has 
@@ -142,7 +145,7 @@ end
     """
 
     for item in caseList
-        @show item, item._incoming_asscon
+        @show item, item._node._incoming_asscon
     end
     @show caseList
     # TODO lag bra automatiserte testar for forrige opplegget! TODO

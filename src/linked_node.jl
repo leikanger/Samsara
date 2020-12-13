@@ -144,7 +144,7 @@ function linked_list_factory(N::Int; in_MuExS =nothing)
     for i in 2:N
         the_node = LinkedCardinalNode(SAT("n"*string(i), inMuExS=in_MuExS))
         @show the_node
-        @show typeof(in_MuExS)
+        @show in_MuExS
         #the_node = LinkedCardinalNode("n"*string(i), in_MuEx=in_MuExS)
         push!(retList, the_node)
         _set_node_to_W!(the_node, previous_node)
