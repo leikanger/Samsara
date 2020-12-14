@@ -15,8 +15,8 @@ mutable struct LinkedGate <: Conception.AbstractConcept
     _gate_is_open
     _conditioned_on_trait
     function LinkedGate(nodeA::T, nodeB::Union{T, Nothing}=nothing; 
-                        conditional::Union{T, Nothing}=nothing) where
-                            {T <: Conception.AbstractConcept}
+                        conditional::Union{L, Nothing}=nothing) where
+                            {T <: Conception.AbstractConcept, L <: Conception.AbstractConcept}
         new("gate", nodeA, nodeB, false, conditional)
     end
 end

@@ -78,16 +78,31 @@ function traverse_MuExS(the_muex::Conception.MuExS; direction =:East)
     return number_of_nodes
 end
 
-@testset "Tests involving LinkedLists with LinkedGate" begin
+""" Setting up the test system: [Ω | a b c d e] , where | represents the gate. 
+Activating [c] causes the gate to open. 
+"""
+function create_Ω_case()
+    Conception.__purge_everything!!()
+
     the_muex = MuExS()
     first_link = LinkedCardinalNode(:Ω, in_MuEx=the_muex)
-    the_gate = LinkedGate(first_link)
-    Samsara._set_node_to_E!(first_link, the_gate)
     linear_list = Samsara.linked_list_factory(5, in_MuExS=the_muex)
+    # unlocking the gate by visiting [c]
+    Conception.set_connected_concept(linear_list[3]._node, SAT(:gate_open))
+    # Connect the gate:
+    the_gate = LinkedGate(first_link, conditional=SAT(:gate_open))
+    Samsara._set_node_to_E!(first_link, the_gate)
     Samsara.gate_set_connected_node!(the_gate, linear_list[1])
     Samsara._set_node_to_W!(linear_list[1], the_gate)
-    @show the_muex
-    " Setting up the test system: [Ω | a b c d e] , where | represents the gate. "
+    # Print
+    println("Creating Ω test case: ", the_muex)
+    return the_muex, the_gate
+end
+
+
+@testset "Tests involving LinkedLists with LinkedGate" begin
+    the_muex, the_gate = create_Ω_case()
+    first_link = the_muex._elements[1]
 
     activate!(first_link)
     Samsara.open_gate!(the_gate, false)
@@ -96,20 +111,23 @@ end
     """ Gate:CLOSED -- iteration through the goes through all elements BEFORE gate. """
 
     activate!(first_link)
-    Samsara.open_gate!(the_gate, true)
+    activate!(SAT(:gate_open))
     number_of_nodes = traverse_MuExS(the_muex)
     @test number_of_nodes == 6
     """ Gate:OPEN -- iteration through the goes through all elements gate. """
 
     # We are at last link: Traverse back, but to a closed gate:
-    Samsara.open_gate!(the_gate, false)
+    deactivate!(SAT(:gate_open))
+    # Samsara.open_gate!(the_gate, false)  // dette er effekta av forrige statement
     number_of_nodes = traverse_MuExS(the_muex, direction=:West)
     @test number_of_nodes == 5
     """ Gate:CLOSED -- Traverse back (to the gate). """
 
+    # Traverse list east again, passing SAT(c) => linked with SAT(:gate_open) => opened gate!
+    #traverse_MuExS(the_muex, direction=:East)
+    #@test is_active(SAT(:gate_open))
+    
     # PLAN
-    # - sett nøkkelen til gate til å være en SAT: SAT(:door_open)
-    #   -> SettSett slik at SAT(c) => SAT(:door_open)       (allerede impl. for SAT-conditional)
     # - kjør random walk. Test IV for SAT(a) mtp. Ω , når gate er åpen, når gate er stengd.
     #   -> Du kan tenke: SAT(:door_open) som satA, og satB, satA som events på veg mot satOmega: 
     #       (blir nesten som Q-learning! IV-learning med state-SAT som actions!)
