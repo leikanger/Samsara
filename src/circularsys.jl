@@ -27,7 +27,7 @@ mutable struct CircularSys <: Samsara.AbstractSystem
     end
 end
 
-Conception.activate!(everything_else) = return
+# Conception.activate!(everything_else) = return
 
 """
 system_state(sys::CircularSys) 
