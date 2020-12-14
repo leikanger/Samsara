@@ -66,6 +66,9 @@ member_of_MuExS(it::LinkedCardinalNode) = it._node.member_of_MuExS
 function Conception.activate!(it::LinkedCardinalNode)
     activate!(it._node)
 end
+function Conception.set_connected_concept(it::LinkedCardinalNode, with::Conception.AbstractConcept)
+    Conception.set_connected_concept(it._node, with)
+end
 
 """ show(IO, LinkeNode)
 Print LinkeNode with node_to_W and node_to_E, with '|' if absent.

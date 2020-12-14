@@ -88,7 +88,8 @@ function create_Ω_case()
     first_link = LinkedCardinalNode(:Ω, in_MuEx=the_muex)
     linear_list = Samsara.linked_list_factory(5, in_MuExS=the_muex)
     # unlocking the gate by visiting [c]
-    Conception.set_connected_concept(linear_list[3]._node, SAT(:gate_open))
+    the_key = linear_list[3]
+    Conception.set_connected_concept(the_key, SAT(:gate_open))
     # Connect the gate:
     the_gate = LinkedGate(first_link, conditional=SAT(:gate_open))
     Samsara._set_node_to_E!(first_link, the_gate)
@@ -96,12 +97,12 @@ function create_Ω_case()
     Samsara._set_node_to_W!(linear_list[1], the_gate)
     # Print
     println("Creating Ω test case: ", the_muex)
-    return the_muex, the_gate
+    return the_muex, the_gate, the_key
 end
 
 
 @testset "Tests involving LinkedLists with LinkedGate" begin
-    the_muex, the_gate = create_Ω_case()
+    the_muex, the_gate, the_key = create_Ω_case()
     first_link = the_muex._elements[1]
 
     activate!(first_link)
@@ -116,16 +117,29 @@ end
     @test number_of_nodes == 6
     """ Gate:OPEN -- iteration through the goes through all elements gate. """
 
-    # We are at last link: Traverse back, but to a closed gate:
+    activate!(first_link)
     deactivate!(SAT(:gate_open))
-    # Samsara.open_gate!(the_gate, false)  // dette er effekta av forrige statement
-    number_of_nodes = traverse_MuExS(the_muex, direction=:West)
-    @test number_of_nodes == 5
-    """ Gate:CLOSED -- Traverse back (to the gate). """
+    number_of_nodes = traverse_MuExS(the_muex)
+    @test number_of_nodes == 1
 
-    # Traverse list east again, passing SAT(c) => linked with SAT(:gate_open) => opened gate!
-    #traverse_MuExS(the_muex, direction=:East)
-    #@test is_active(SAT(:gate_open))
+    activate!(the_key)
+    @show the_key._node
+    @show the_key._node._connectedConcept
+    @show is_active(the_key._node._connectedConcept)
+    activate!(first_link)
+    @show is_active(the_key._node._connectedConcept)
+    number_of_nodes = traverse_MuExS(the_muex)
+    @test number_of_nodes == 6
+
+    # We are at last link: gate closed.
+    #   Traverse list east again, passing SAT(c) => linked with SAT(:gate_open) => opened gate!
+    deactivate!(SAT(:gate_open)) # CLOSE GATE
+    number_of_nodes = traverse_MuExS(the_muex, direction=:West)
+    @test number_of_nodes == 6   # .. still, we get 6 : Explanation:
+    @test is_active(SAT(:gate_open))
+    #               #       # activating the_key, along the way, opens the gate before we reach it.
+    """ Traversing back activates the key, opening the gate again before we reach it. """
+
     
     # PLAN
     # - kjør random walk. Test IV for SAT(a) mtp. Ω , når gate er åpen, når gate er stengd.
