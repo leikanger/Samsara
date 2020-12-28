@@ -2,6 +2,10 @@ module TEST_SAMSARA
 using Samsara, Test, Conception
 using Printf
 
+""" global state_space - for testing """
+state_space = MuExS()
+the_active_state = Conception.the_active_event_of(state_space)
+
 """ Setting up the test system: [Ω | a b c d e] , where | represents the gate. 
 Activating [c] causes the gate to open. 
 (e.g. going to SAT [Ω] from SAT [a] have to go via [c] (to open the gate ||) )
@@ -9,9 +13,9 @@ Activating [c] causes the gate to open.
 function create_Ω_case()
     Conception.__purge_everything!!()
 
-    the_muex = MuExS()
-    first_link = LinkedCardinalNode(:Ω, in_MuEx=the_muex)
-    linear_list = Samsara.linked_list_factory(5, in_MuExS=the_muex)
+    global state_space = MuExS()
+    first_link = LinkedCardinalNode(:Ω, in_MuEx=state_space)
+    linear_list = Samsara.linked_list_factory(5, in_MuExS=state_space)
     # unlocking the gate by visiting [c]
     the_key = linear_list[3]
     Conception.set_connected_concept(the_key, SAT(:gate_open))
@@ -21,8 +25,9 @@ function create_Ω_case()
     Samsara.gate_set_connected_node!(the_gate, linear_list[1])
     Samsara._set_node_to_W!(linear_list[1], the_gate)
     # Print
-    println("Creating Ω test case: ", the_muex)
-    return the_muex, the_gate, the_key
+    println("Creating Ω test case: ", state_space)
+    activate!(linear_list[1])  #activate element [a]    ((( eller er dette [e]? )))
+    return state_space, the_gate, the_key
 end
 
 """ Convenience-function for testing the Ω case """
@@ -39,6 +44,15 @@ function traverse_MuExS(the_muex::Conception.MuExS; direction =:East)
         end
     end
     return number_of_nodes
+end
+
+function go_west()
+    current_state = Conception.the_active_event_of(state_space)
+    activate!(Samsara.west_of(current_state))
+end
+function go_east()
+    current_state = Conception.the_active_event_of(state_space)
+    activate!(Samsara.east_of(current_state))
 end
 
 # # # # # # # # # TESTS # # # # # # # # # # 
@@ -147,6 +161,49 @@ The gate is initially locked, but can be opened by visiting [c]
 Getting to [Ω] from [a] requires that we visit [c] first.
 """
     
+@testset "First attempt to integrate Desire with experience/HAL: iSAT with linked actions" begin
+    using Samsara: the_node, east_of, west_of
+    using Conception: the_active_event_of
+
+    global state_space
+    the_muex, the_gate, the_key = create_Ω_case()
+    action_set = MuExS()
+    #   HER STÅR EG FAST: TA DET OPP I MORGON!
+    aE = iSAT(:East, linked_function=()->go_east(), inMuExS=action_set)
+    aW = iSAT(:West, linked_function=()->go_west(), inMuExS=action_set)
+    @test length(action_set) == 2
+
+    pre_state = the_active_event_of(state_space)
+    go_east() 
+    @test the_active_event_of(state_space) == the_node(east_of(pre_state))
+    go_west() 
+    @test the_active_event_of(state_space) == pre_state
+    " verifying the linked functions for the SAT in the action_set.. "
+
+    pre_state = the_active_event_of(state_space)
+    activate!(aE)
+    @test the_active_event_of(state_space) == the_node(east_of(pre_state))
+    activate!(aW)
+    @test the_active_event_of(state_space) == pre_state         # back again..
+    pre_state = Conception.the_active_event_of(state_space)
+    @test Conception.the_active_event_of(state_space) == pre_state  #gate closed..
+    """ We can go to the east by activating iSAT :aE (with linked function go_east(), 
+    working on global state space) and we can go west by activating iSAT :aW (go_west())
+    When the gate is closed, we stay put..
+    """
+
+    while(!is_active(SAT(:Ω)))
+        activate!(rand(action_set))
+    end
+    @assert is_active(SAT(:Ω))
+    " Do random-walk untill we reach Ω - gate is opened and we have gotten through! "
+
+
+    # TODO 
+        #- SÅ kan vi teste: resett heile env, ved å deaktivere alt og lukker porten; for så
+        #HENT UT DESIRE! DET ER SYKT SPENNENDES!
+                    
+end
     # PLAN
     # - kjør random walk. Test IV for SAT(a) mtp. Ω , når gate er åpen, når gate er stengd.
     #   -> Du kan tenke: SAT(:door_open) som satA, og satB, satA som events på veg mot satOmega: 
