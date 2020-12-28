@@ -119,7 +119,7 @@ end
         " The activating an item causes that item to be active in that muex.. (verifying  "
     end
     for i in 2:length(caseList)
-        @test length(caseList[i]._node._incoming_asscon) == 0
+        @test length(caseList[i]._node._incoming_inferences) == 0
     end
     """ .. but the lenght of incoming asscons are 0 (since no concurrent event happened
     while traversing the linked state-list """
@@ -130,8 +130,8 @@ end
         @test Conception.the_active_event_of(muex) == item._node
     end
     for i in 2:length(caseList)
-        @test caseList[i]._node._incoming_asscon[1].nodeL == caseList[i-1]._node
-        @test caseList[i]._node._incoming_asscon[1].nodeR == SAT(:some_action)
+        @test caseList[i]._node._incoming_inferences[1].nodeA == caseList[i-1]._node
+        @test caseList[i]._node._incoming_inferences[1].nodeR == SAT(:some_action)
     end
     """ incoming asscons is sorted, such that the first element is the most recent in history;
     This test verifies that each element has 
@@ -140,7 +140,7 @@ end
     """
 
     for item in caseList
-        @show item, item._node._incoming_asscon
+        @show item, item._node._incoming_inferences
     end
     @show caseList
     # TODO lag bra automatiserte testar for forrige opplegget! TODO
