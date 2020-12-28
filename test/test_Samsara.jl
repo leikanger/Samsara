@@ -2,6 +2,46 @@ module TEST_SAMSARA
 using Samsara, Test, Conception
 using Printf
 
+""" Setting up the test system: [Ω | a b c d e] , where | represents the gate. 
+Activating [c] causes the gate to open. 
+(e.g. going to SAT [Ω] from SAT [a] have to go via [c] (to open the gate ||) )
+"""
+function create_Ω_case()
+    Conception.__purge_everything!!()
+
+    the_muex = MuExS()
+    first_link = LinkedCardinalNode(:Ω, in_MuEx=the_muex)
+    linear_list = Samsara.linked_list_factory(5, in_MuExS=the_muex)
+    # unlocking the gate by visiting [c]
+    the_key = linear_list[3]
+    Conception.set_connected_concept(the_key, SAT(:gate_open))
+    # Connect the gate:
+    the_gate = LinkedGate(first_link, conditional=SAT(:gate_open))
+    Samsara._set_node_to_E!(first_link, the_gate)
+    Samsara.gate_set_connected_node!(the_gate, linear_list[1])
+    Samsara._set_node_to_W!(linear_list[1], the_gate)
+    # Print
+    println("Creating Ω test case: ", the_muex)
+    return the_muex, the_gate, the_key
+end
+
+""" Convenience-function for testing the Ω case """
+function traverse_MuExS(the_muex::Conception.MuExS; direction =:East)
+    the_item = Conception.the_active_event_of(the_muex)
+    number_of_nodes = 0
+    while !isnothing(the_item) 
+        number_of_nodes+=1
+        last_item = the_item
+        direction == :West && activate!(Samsara.west_of(the_item))
+        direction == :East && activate!(Samsara.east_of(the_item))
+        if last_item == (the_item = Conception.the_active_event_of(the_muex))
+            break
+        end
+    end
+    return number_of_nodes
+end
+
+# # # # # # # # # TESTS # # # # # # # # # # 
 @testset "system initiation" begin
     DemoSys = Samsara.DemoSys
 
@@ -50,61 +90,24 @@ using Printf
     case._latent_variables = (1.0, -5.0)
     Samsara.step_system_mechanics!(case) # update
     @test system_state(case) == (11.0, 5.0)
-    " Døme på korleis pådrag kan settes ved latent_variables: Ingen krav om at det er skalar heller! "
-
-
+    " Døme på korleis pådrag settes ved latent_variables: Ingen krav om at det er skalar heller! "
 
     """
         Vi kan lage simuleringer ved å definere system mechanics i funksjonen 
-        Samsara.step_system_mechanics!(sys) -- som vidare åpner for multiple dispatch ved å lage andre
-        subtyper SystemX <: AbstractSystem, og bare definere Sams.step_system_mechanics!(SysX) !!!
+        Samsara.step_system_mechanics!(sys) -- som vidare åpner for multiple dispatch ved å 
+        lage andre subtyper SystemX <: AbstractSystem, og bare definere 
+        Sams.step_system_mechanics!(SysX) 
 
-        Funksjonane kan vidare undersøke om event-SAT er aktiv:  BAM! gjennom:    HAL.still_active(SAT) 
+        Funksjonane kan vidare undersøke om event-SAT er aktiv:  BAM! gjennom:    
+        HAL.still_active(SAT) 
     """
 end#testset
-
-function traverse_MuExS(the_muex::Conception.MuExS; direction =:East)
-    the_item = Conception.the_active_event_of(the_muex)
-    number_of_nodes = 0
-    while !isnothing(the_item) 
-        number_of_nodes+=1
-        last_item = the_item
-        direction == :West && activate!(Samsara.west_of(the_item))
-        direction == :East && activate!(Samsara.east_of(the_item))
-        if last_item == (the_item = Conception.the_active_event_of(the_muex))
-            break
-        end
-    end
-    return number_of_nodes
-end
-
-""" Setting up the test system: [Ω | a b c d e] , where | represents the gate. 
-Activating [c] causes the gate to open. 
-"""
-function create_Ω_case()
-    Conception.__purge_everything!!()
-
-    the_muex = MuExS()
-    first_link = LinkedCardinalNode(:Ω, in_MuEx=the_muex)
-    linear_list = Samsara.linked_list_factory(5, in_MuExS=the_muex)
-    # unlocking the gate by visiting [c]
-    the_key = linear_list[3]
-    Conception.set_connected_concept(the_key, SAT(:gate_open))
-    # Connect the gate:
-    the_gate = LinkedGate(first_link, conditional=SAT(:gate_open))
-    Samsara._set_node_to_E!(first_link, the_gate)
-    Samsara.gate_set_connected_node!(the_gate, linear_list[1])
-    Samsara._set_node_to_W!(linear_list[1], the_gate)
-    # Print
-    println("Creating Ω test case: ", the_muex)
-    return the_muex, the_gate, the_key
-end
-
 
 @testset "Tests involving LinkedLists with LinkedGate" begin
     the_muex, the_gate, the_key = create_Ω_case()
     first_link = the_muex._elements[1]
-
+    @test isa(first_link, SAT)
+    
     activate!(first_link)
     Samsara.open_gate!(the_gate, false)
     number_of_nodes = traverse_MuExS(the_muex)
@@ -123,11 +126,9 @@ end
     @test number_of_nodes == 1
 
     activate!(the_key)
-    @show the_key._node
-    @show the_key._node._connectedConcept
-    @show is_active(the_key._node._connectedConcept)
+    @test is_active(the_key._node)
+    @test is_active(the_key._node._connectedConcept)
     activate!(first_link)
-    @show is_active(the_key._node._connectedConcept)
     number_of_nodes = traverse_MuExS(the_muex)
     @test number_of_nodes == 6
 
@@ -139,12 +140,16 @@ end
     @test is_active(SAT(:gate_open))
     #               #       # activating the_key, along the way, opens the gate before we reach it.
     """ Traversing back activates the key, opening the gate again before we reach it. """
-
+end
+""" Ω test works as planned: See create_Ω_case() in line 10
+Ω-case:     [Ω | a b c d e] , where | represents the gate. 
+The gate is initially locked, but can be opened by visiting [c]
+Getting to [Ω] from [a] requires that we visit [c] first.
+"""
     
     # PLAN
     # - kjør random walk. Test IV for SAT(a) mtp. Ω , når gate er åpen, når gate er stengd.
     #   -> Du kan tenke: SAT(:door_open) som satA, og satB, satA som events på veg mot satOmega: 
     #       (blir nesten som Q-learning! IV-learning med state-SAT som actions!)
-end
 
 end#module TEST_SAMSARA
