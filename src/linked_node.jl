@@ -124,6 +124,13 @@ function east_of(node::SAT)
     east_of(find_link_with_SAT(node))
 end
 
+""" node(it::LinkedCardinalNode)
+return the actual SAT of a LinkedCardinalNode
+"""
+function the_node(it::LinkedCardinalNode)
+    it._node
+end
+
 """ west_of(node)
 return the node that lies to the west of node::LinkedCardinalNode)
 """

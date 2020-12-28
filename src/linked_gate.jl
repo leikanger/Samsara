@@ -23,6 +23,13 @@ end
 
 Conception.get_id(it::LinkedGate) = string(it)
 
+""" the_node(gate::LinkedGate)
+return the node that is activated when the gate is relevant (pre_node)
+"""
+function the_node(the_gate::LinkedGate)
+    the_gate.pre_node
+end
+
 """ show(IO, LinkeGate)
 Print LinkeGate as { < > , <|> } for {opened, closed}
 """
