@@ -10,10 +10,10 @@ CTOR arguments:
 """
 mutable struct LinkedGate <: Conception.AbstractConcept
     _id
-    pre_node
-    post_node
+    pre_node::AbstractConcept
+    post_node::Union{AbstractConcept, Nothing}
     _gate_is_open
-    _conditioned_on_trait
+    _unlocked_by_trait
     function LinkedGate(nodeA::T, nodeB::Union{T, Nothing}=nothing; 
                         conditional::Union{L, Nothing}=nothing) where
                             {T <: Conception.AbstractConcept, L <: Conception.AbstractConcept}
@@ -34,9 +34,9 @@ end
 """ is_open(LinkedGate) 
 getter for whether gate is open or not """
 function gate_is_open(the_gate::LinkedGate)
-    isnothing(the_gate._conditioned_on_trait) && return the_gate._gate_is_open
+    isnothing(the_gate._unlocked_by_trait) && return the_gate._gate_is_open
 
-    return is_active(the_gate._conditioned_on_trait)
+    return is_active(the_gate._unlocked_by_trait)
 end
 " convenience: Make for readable code "
 gate_is_closed(the_gate::LinkedGate) = !gate_is_open(the_gate)

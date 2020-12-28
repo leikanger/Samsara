@@ -92,7 +92,7 @@ end
     @assert Conception.the_active_event_of(the_muex) == n1
     some_SAT = SAT(:conditional_SAT)
     case = LinkedGate(n1, n2, conditional=some_SAT)
-    @test case._conditioned_on_trait == some_SAT
+    @test case._unlocked_by_trait == some_SAT
     """ Setting up the situation: 
     - Gate n1 ⟶ n2 | cSAT     (n1 and n2 are MuExS, cSAT is not.)
     - We're in n1, before the gate. 
