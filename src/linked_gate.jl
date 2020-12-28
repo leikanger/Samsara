@@ -12,8 +12,8 @@ mutable struct LinkedGate <: Conception.AbstractConcept
     _id
     pre_node::AbstractConcept
     post_node::Union{AbstractConcept, Nothing}
-    _gate_is_open
-    _unlocked_by_trait
+    _gate_is_open::Bool
+    _unlocked_by_trait::Union{AbstractConcept, Nothing}
     function LinkedGate(nodeA::T, nodeB::Union{T, Nothing}=nothing; 
                         conditional::Union{L, Nothing}=nothing) where
                             {T <: Conception.AbstractConcept, L <: Conception.AbstractConcept}
