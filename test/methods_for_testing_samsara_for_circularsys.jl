@@ -1,4 +1,4 @@
-using .Samsara, Conception
+using Samsara, Conception
 using Printf
 
 function run(N::Int; number_of_nodes = nothing)
@@ -69,7 +69,7 @@ end
 function show_links_to(to_node::SAT, in_environment::Samsara.AbstractSystem)
     all_nodes = in_environment._all_nodes
 
-    lista = sort(to_node._incoming_asscon, rev=true)
+    lista = sort(to_node._incoming_inferences, rev=true)
     for node in all_nodes
         println("__________________"*string(node)*" ⟶ "*string(to_node)*"__________________")
         show_all_elem_of(lista, node)
@@ -77,7 +77,7 @@ function show_links_to(to_node::SAT, in_environment::Samsara.AbstractSystem)
 end
 function show_all_elem_of(lista::Vector, element)
     for it in lista
-        (it.nodeL == element) && @show it
+        (it.nodeA == element) && @show it
     end
 end
 
@@ -85,14 +85,14 @@ end
 function get_maxvalue_histogram_to(node_lista::Vector, to_node::SAT)
     histrogram = Union{Missing, Float64}[]
     for it in node_lista
-        push!(histrogram, get_maxvalue_from(to_node._incoming_asscon, it))
+        push!(histrogram, get_maxvalue_from(to_node._incoming_inferences, it))
     end
     histrogram
 end
 function get_maxvalue_from(lista::Vector, node::SAT)
     all_elements = []
     for it in lista
-        (it.nodeL == node) && push!(all_elements, association(it))
+        (it.nodeA == node) && push!(all_elements, inference(it))
     end
     sort!(all_elements)
     
