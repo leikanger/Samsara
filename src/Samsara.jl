@@ -56,4 +56,9 @@ export LinkedCardinalNode
 include("linked_gate.jl")
 export LinkedGate
 
+" convenience: Base.show for Pairs "
+#function Base.show(io::IO, arg::Pair)
+#    print(io, "Pair[ "*string(arg[1])*"  |||   "*string(arg[2])*" ]")
+#end
+    
 end # module
